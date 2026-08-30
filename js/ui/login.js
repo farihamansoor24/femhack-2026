@@ -52,8 +52,8 @@ import { fadeIn } from "../animations.js";
       
       showToast("Welcome back!", "success");
       
-       window.location.hash = "#/home";
-            // window.location.href = "home.html";
+      //  window.location.hash = "#/home";
+         window.location.href = "index.html";
 
     } catch (err) {
       showToast(friendlyAuthError(err), "error");

@@ -145,15 +145,8 @@ if (googleAuthBtn) {
       // }
 
       showToast("Signed in successfully!", "success");
-
-      // 3. Page Redirect
-      setTimeout(() => {
-        if (selectedRole === "provider") {
-          window.location.href = "provider-profile.html";
-        } else {
-          window.location.href = "index.html";
-        }
-      }, 500);
+window.location.href = "index.html";
+ 
 
     } catch (err) {
       console.error(err);
