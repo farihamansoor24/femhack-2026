@@ -129,4 +129,35 @@ if (getState().ready) {
   started = true;
   initRouter();
 }
+// Google Login Handler Fix
+const googleAuthBtn = document.getElementById("googleAuthBtn");
+if (googleAuthBtn) {
+  googleAuthBtn.addEventListener("click", async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      // 1. First Sign In with Google
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
+     
+      // if (selectedRole === "provider") {
+   
+      // }
+
+      showToast("Signed in successfully!", "success");
+
+      // 3. Page Redirect
+      setTimeout(() => {
+        if (selectedRole === "provider") {
+          window.location.href = "provider-profile.html";
+        } else {
+          window.location.href = "index.html";
+        }
+      }, 500);
+
+    } catch (err) {
+      console.error(err);
+      showToast(err.message || "Google Authentication failed.", "error");
+    }
+  });
+}
