@@ -103,3 +103,20 @@ if (getState().ready) {
   started = true;
   initRouter();
 }
+// Google Login Handler
+const googleAuthBtn = document.getElementById("googleAuthBtn");
+if (googleAuthBtn) {
+  googleAuthBtn.addEventListener("click", async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      window.location.href = "index.html";
+    } catch (err) {
+      const authError = document.getElementById("authError");
+      if (authError) {
+        authError.textContent = err.message;
+        authError.classList.remove("hidden");
+      }
+    }
+  });
+}
