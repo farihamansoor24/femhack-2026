@@ -58,20 +58,23 @@ function updateNav() {
     guest?.classList.add("hidden");
     userBox?.classList.remove("hidden");
     userBox?.classList.add("flex");
-
+    document.getElementById('browse').classList.remove('hidden')
     // Display Name
     const displayName = profile?.name || user.displayName || user.email?.split("@")[0] || "User";
     if (nameEl) nameEl.textContent = `Hi, ${displayName.split(" ")[0]}`;
 
     // Show menu links according to Role
     const userRole = profile?.role || "customer"; // Default fallback customer
-    customerLinks.forEach((el) => el.classList.toggle("hidden", userRole !== "customer"));
-    providerLinks.forEach((el) => el.classList.toggle("hidden", userRole !== "provider"));
-        // Hide all authenticated dashboard links
-    customerLinks.forEach((el) => el.classList.remove("hidden"));
-    providerLinks.forEach((el) => el.classList.remove("hidden"));
-    loginLink.classList.add('hidden');
-    registerLink.classList.add('registerLink');
+    // alert(userRole)
+    // customerLinks.forEach((el) => el.classList.toggle("hidden", userRole !== "customer"));
+    // providerLinks.forEach((el) => el.classList.toggle("hidden", userRole !== "provider"));
+    //     // Hide all authenticated dashboard links
+        if(userRole=="customer"){
+    customerLinks.forEach((el) => el.classList.remove("hidden"));}
+    else{
+    providerLinks.forEach((el) => el.classList.remove("hidden"));}
+    loginLink?.classList.add('hidden');
+    registerLink?.classList.add('registerLink');
 
   } else {
     // 2. Logged OUT / Guest View
@@ -132,8 +135,29 @@ if (googleAuthBtn) {
   googleAuthBtn.addEventListener("click", async () => {
     const provider = new GoogleAuthProvider();
     try {
+       if (role === "provider") {
+    await setDoc(
+      doc(db, "providers", cred.user.uid),
+      {
+        id: cred.user.uid,
+        name,
+        business: "",
+        service: "",
+        location: "",
+        experience: 0,
+        price: 0,
+        priceUnit: "visit",
+        bio: "",
+        rating: 0,
+        reviewCount: 0,
+        available: true,
+        createdAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+  }
       await signInWithPopup(auth, provider);
-            alert(provider)
+      
 
       window.location.href = "index.html";
     } catch (err) {

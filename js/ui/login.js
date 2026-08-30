@@ -49,7 +49,9 @@ import { fadeIn } from "../animations.js";
     btn.textContent = "Logging in\u2026";
     try {
       await loginUser({ email: values.email, password: values.password });
+      
       showToast("Welcome back!", "success");
+      
        window.location.hash = "#/home";
             // window.location.href = "home.html";
 

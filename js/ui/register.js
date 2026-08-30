@@ -47,13 +47,13 @@ import { fadeIn } from "../animations.js";
 //     </section>
 //   `;
 
-//   // mount.querySelectorAll(".role-btn").forEach((btn) => {
-//   //   btn.addEventListener("click", () => {
-//   //     selectedRole = btn.dataset.role;
-//   //     mount.querySelectorAll(".role-btn").forEach((b) => b.classList.remove("active"));
-//   //     btn.classList.add("active");
-//   //   });
-//   // });
+  document.querySelectorAll(".role-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      selectedRole = btn.dataset.role;
+      document.querySelectorAll(".role-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
 
   const form = document.getElementById("register-form");
   form.addEventListener("submit", async (e) => {
@@ -78,8 +78,8 @@ import { fadeIn } from "../animations.js";
     try {
       await registerUser({ name: values.name, email: values.email, password: values.password, role: selectedRole });
       showToast("Account created. Welcome to Guildwork!", "success");
-      // window.location.hash = selectedRole === "provider" ? "#/provider/profile" : "#/home";
-          window.location.href = selectedRole === "provider" ? "#/provider/profile" : "index.html";
+      window.location.hash = selectedRole === "provider" ? "#/provider/profile" : "#/home";
+          // window.location.href = selectedRole === "provider" ? "#/provider/profile" : "index.html";
 
     } catch (err) {
      
