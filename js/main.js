@@ -1,5 +1,5 @@
 import { isFirebaseConfigured } from "./firebase-config.js";
-import { watchAuthState, fetchUserProfile, logoutUser } from "./auth.js";
+import { watchAuthState, fetchUserProfile, logoutUser,GoogleAuthProvider } from "./auth.js";
 import { getState, setState, subscribe } from "./state.js";
 import { registerRoute, registerNotFound, initRouter, handleRoute } from "./router.js";
 import { seedProvidersIfEmpty } from "./db.js";

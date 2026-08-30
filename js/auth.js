@@ -68,3 +68,4 @@ export async function fetchUserProfile(uid) {
   const snap = await getDoc(doc(db, "users", uid));
   return snap.exists() ? snap.data() : null;
 }
+export {GoogleAuthProvider}
