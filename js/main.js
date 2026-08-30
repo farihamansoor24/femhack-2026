@@ -1,4 +1,4 @@
-import { isFirebaseConfigured } from "./firebase-config.js";
+import { isFirebaseConfigured,auth,signInWithPopup } from "./firebase-config.js";
 import { watchAuthState, fetchUserProfile, logoutUser,GoogleAuthProvider } from "./auth.js";
 import { getState, setState, subscribe } from "./state.js";
 import { registerRoute, registerNotFound, initRouter, handleRoute } from "./router.js";
@@ -41,29 +41,46 @@ registerNotFound((mount) => {
 });
 
 // ---------- Nav sync ----------
+// ---------- Nav sync ----------
 function updateNav() {
   const { user, profile } = getState();
   const guest = document.getElementById("nav-guest");
   const userBox = document.getElementById("nav-user");
   const nameEl = document.getElementById("nav-user-name");
+  
+  // Desktop aur Mobile dono nav links ko target karein
   const customerLinks = document.querySelectorAll('[data-auth="customer"]');
   const providerLinks = document.querySelectorAll('[data-auth="provider"]');
 
-  if (user && profile) {
+  if (user) {
+    // 1. Logged IN User View
     guest?.classList.add("hidden");
     userBox?.classList.remove("hidden");
     userBox?.classList.add("flex");
-    nameEl.textContent = `Hi, ${profile.name?.split(" ")[0] || "there"}`;
-    customerLinks.forEach((el) => el.classList.toggle("hidden", profile.role !== "customer"));
-    providerLinks.forEach((el) => el.classList.toggle("hidden", profile.role !== "provider"));
+
+    // Display Name
+    const displayName = profile?.name || user.displayName || user.email?.split("@")[0] || "User";
+    if (nameEl) nameEl.textContent = `Hi, ${displayName.split(" ")[0]}`;
+
+    // Show menu links according to Role
+    const userRole = profile?.role || "customer"; // Default fallback customer
+    customerLinks.forEach((el) => el.classList.toggle("hidden", userRole !== "customer"));
+    providerLinks.forEach((el) => el.classList.toggle("hidden", userRole !== "provider"));
+
   } else {
+    // 2. Logged OUT / Guest View
     guest?.classList.remove("hidden");
+    guest?.classList.add("flex");
+    
     userBox?.classList.add("hidden");
     userBox?.classList.remove("flex");
+
+    // Hide all authenticated dashboard links
     customerLinks.forEach((el) => el.classList.add("hidden"));
     providerLinks.forEach((el) => el.classList.add("hidden"));
   }
 }
+
 subscribe(updateNav);
 
 document.getElementById("btn-logout")?.addEventListener("click", async () => {
@@ -110,6 +127,8 @@ if (googleAuthBtn) {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
+            alert(provider)
+
       window.location.href = "index.html";
     } catch (err) {
       const authError = document.getElementById("authError");

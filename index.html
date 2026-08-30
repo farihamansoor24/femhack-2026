@@ -46,40 +46,59 @@
 </head>
 <body class="bg-paper text-ink font-body antialiased">
 
-  <!-- ===== Top bar ===== -->
-  <header id="site-header" class="sticky top-0 z-40 bg-paper/90 backdrop-blur border-b border-ink/10">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-      <a href="#/home" class="flex items-center gap-2 group" data-link>
-        <span class="w-8 h-8 rounded-sm bg-ink flex items-center justify-center rotate-[-4deg] group-hover:rotate-0 transition-transform duration-300">
-          <span class="text-brasslight font-display font-bold text-sm">G</span>
-        </span>
-        <span class="font-display font-semibold text-xl tracking-tight">Guildwork</span>
-      </a>
+ <!-- ===== Top bar ===== -->
+<header id="site-header" class="sticky top-0 z-40 bg-paper/90 backdrop-blur border-b border-ink/10">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2 group">
+      <span class="w-8 h-8 rounded-sm bg-ink flex items-center justify-center rotate-[-4deg] group-hover:rotate-0 transition-transform duration-300">
+        <span class="text-brasslight font-display font-bold text-sm">G</span>
+      </span>
+      <span class="font-display font-semibold text-xl tracking-tight">Guildwork</span>
+    </a>
 
-      <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate2">
-        <a href="#/home" data-link class="hover:text-ink transition-colors">Browse</a>
-        <a href="#/dashboard/customer" data-link data-auth="customer" class="hidden hover:text-ink transition-colors">My bookings</a>
-        <a href="#/dashboard/provider" data-link data-auth="provider" class="hidden hover:text-ink transition-colors">Job requests</a>
-      </nav>
+    <!-- Desktop Nav Links -->
+    <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate2">
+      <a href="index.html" class="hover:text-ink transition-colors">Browse</a>
+      <a href="customer-dashboard.html" data-auth="customer" class="hidden hover:text-ink transition-colors">My bookings</a>
+      <a href="provider-dashboard.html" data-auth="provider" class="hidden hover:text-ink transition-colors">Job requests</a>
+    </nav>
 
-      <div class="flex items-center gap-3">
-        <div id="nav-guest" class="flex items-center gap-3">
-          <a href="login.html" data-link class="text-sm font-medium text-slate2 hover:text-ink transition-colors">Log in</a>
-          <a href="register.html" data-link class="text-sm font-semibold bg-ink text-paper px-4 py-2 rounded-sm hover:bg-ink2 transition-colors">Get started</a>
-        </div>
-        <div id="nav-user" class="hidden items-center gap-3">
-          <span id="nav-user-name" class="hidden sm:inline text-sm text-slate2"></span>
-          <button id="btn-logout" class="text-sm font-medium border border-ink/20 px-4 py-2 rounded-sm hover:bg-ink hover:text-paper transition-colors">Log out</button>
-        </div>
+    <div class="flex items-center gap-3">
+      <!-- Guest / Logged-in Auth Box -->
+      <div id="nav-guest" class="flex items-center gap-3">
+        <a href="login.html" class="text-sm font-medium text-slate2 hover:text-ink transition-colors">Log in</a>
+        <a href="register.html" class="text-sm font-semibold bg-ink text-paper px-4 py-2 rounded-sm hover:bg-ink2 transition-colors">Get started</a>
       </div>
+      <div id="nav-user" class="hidden items-center gap-3">
+        <span id="nav-user-name" class="hidden sm:inline text-sm text-slate2"></span>
+        <button id="btn-logout" class="text-sm font-medium border border-ink/20 px-4 py-2 rounded-sm hover:bg-ink hover:text-paper transition-colors">Log out</button>
+      </div>
+
+      <!-- Mobile Menu Toggle Button (Small Screens) -->
+      <button id="btn-mobile-menu" aria-label="Toggle Menu" class="md:hidden p-2 text-ink hover:text-brass focus:outline-none">
+        <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
     </div>
-    <!-- mobile nav -->
-    <div class="md:hidden flex items-center gap-5 px-5 pb-3 text-sm font-medium text-slate2">
-      <a href="#/home" data-link class="hover:text-ink">Browse</a>
-      <a href="#/dashboard/customer" data-link data-auth="customer" class="hidden hover:text-ink">My bookings</a>
-      <a href="#/dashboard/provider" data-link data-auth="provider" class="hidden hover:text-ink">Job requests</a>
-    </div>
-  </header>
+  </div>
+
+<!-- Mobile Dropdown Nav Menu -->
+<div id="mobile-menu" class="hidden md:hidden border-t border-ink/10 bg-paper px-5 py-4 flex-col gap-3 text-sm font-medium text-slate2">
+  <a href="index.html" class="hover:text-ink py-1">Browse</a>
+  <a href="login.html" id="loginLink" class="text-sm font-medium text-slate2 hover:text-ink transition-colors py-1">Log in</a>
+        <a href="register.html" id="registerLink" class="text-sm font-medium  text-slate2 py-1 m hover:text-ink transition-colors">Get started</a>
+  
+  <!-- Logged-in Customer Links -->
+  <a href="customer-dashboard.html" data-auth="customer" class="hidden hover:text-ink py-1">My bookings</a>
+  
+  <!-- Logged-in Provider Links -->
+  <a href="provider-dashboard.html" data-auth="provider" class="hidden hover:text-ink py-1">Job requests</a>
+</div>
+</header>
 
   <!-- config banner -->
   <div id="config-banner" class="hidden bg-rust text-paper text-sm px-5 py-3 text-center"></div>
@@ -106,5 +125,30 @@
   </div>
 
   <script type="module" src="js/main.js"></script>
+  <script>
+    // Mobile menu toggle handling
+// Mobile menu toggle handling
+const btnMobileMenu = document.getElementById("btn-mobile-menu");
+const mobileMenu = document.getElementById("mobile-menu");
+const iconOpen = document.getElementById("menu-icon-open");
+const iconClose = document.getElementById("menu-icon-close");
+
+if (btnMobileMenu && mobileMenu) {
+  btnMobileMenu.addEventListener("click", () => {
+    const isHidden = mobileMenu.classList.contains("hidden");
+    if (isHidden) {
+      mobileMenu.classList.remove("hidden");
+      mobileMenu.classList.add("flex");
+      iconOpen?.classList.add("hidden");
+      iconClose?.classList.remove("hidden");
+    } else {
+      mobileMenu.classList.add("hidden");
+      mobileMenu.classList.remove("flex");
+      iconOpen?.classList.remove("hidden");
+      iconClose?.classList.add("hidden");
+    }
+  });
+}
+  </script>
 </body>
 </html>

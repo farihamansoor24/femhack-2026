@@ -141,3 +141,18 @@ input, select, textarea {
   background: #FFFFFF;
 }
 input::placeholder, textarea::placeholder { color: #9AA3AE; }
+/* Mobile screens par Desktop Navigation ko forcefully hide karne ke liye */
+@media (max-width: 960px) {
+  #nav-guest {
+    display: none !important;
+  }
+  #navAuthBtns{
+    display: none !important;
+  }
+  #logoutBtn{
+     display: none !important;
+  }
+  #profile{
+    display: none !important;
+  }
+}
