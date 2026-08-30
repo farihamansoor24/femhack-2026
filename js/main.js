@@ -47,7 +47,8 @@ function updateNav() {
   const guest = document.getElementById("nav-guest");
   const userBox = document.getElementById("nav-user");
   const nameEl = document.getElementById("nav-user-name");
-  
+  const loginLink=document.getElementById("loginLink");
+  const registerLink=document.getElementById("registerLink");
   // Desktop aur Mobile dono nav links ko target karein
   const customerLinks = document.querySelectorAll('[data-auth="customer"]');
   const providerLinks = document.querySelectorAll('[data-auth="provider"]');
@@ -66,6 +67,11 @@ function updateNav() {
     const userRole = profile?.role || "customer"; // Default fallback customer
     customerLinks.forEach((el) => el.classList.toggle("hidden", userRole !== "customer"));
     providerLinks.forEach((el) => el.classList.toggle("hidden", userRole !== "provider"));
+        // Hide all authenticated dashboard links
+    customerLinks.forEach((el) => el.classList.remove("hidden"));
+    providerLinks.forEach((el) => el.classList.remove("hidden"));
+    loginLink.classList.add('hidden');
+    registerLink.classList.add('registerLink');
 
   } else {
     // 2. Logged OUT / Guest View
