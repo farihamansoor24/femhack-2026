@@ -58,7 +58,7 @@ function updateNav() {
     guest?.classList.add("hidden");
     userBox?.classList.remove("hidden");
     userBox?.classList.add("flex");
-    document.getElementById('browse').classList.remove('hidden')
+    document.getElementById('browse')?.classList.remove('hidden')
     // Display Name
     const displayName = profile?.name || user.displayName || user.email?.split("@")[0] || "User";
     if (nameEl) nameEl.textContent = `Hi, ${displayName.split(" ")[0]}`;
@@ -129,43 +129,4 @@ if (getState().ready) {
   started = true;
   initRouter();
 }
-// Google Login Handler
-const googleAuthBtn = document.getElementById("googleAuthBtn");
-if (googleAuthBtn) {
-  googleAuthBtn.addEventListener("click", async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-       if (role === "provider") {
-    await setDoc(
-      doc(db, "providers", cred.user.uid),
-      {
-        id: cred.user.uid,
-        name,
-        business: "",
-        service: "",
-        location: "",
-        experience: 0,
-        price: 0,
-        priceUnit: "visit",
-        bio: "",
-        rating: 0,
-        reviewCount: 0,
-        available: true,
-        createdAt: serverTimestamp(),
-      },
-      { merge: true }
-    );
-  }
-      await signInWithPopup(auth, provider);
-      
 
-      window.location.href = "index.html";
-    } catch (err) {
-      const authError = document.getElementById("authError");
-      if (authError) {
-        authError.textContent = err.message;
-        authError.classList.remove("hidden");
-      }
-    }
-  });
-}
