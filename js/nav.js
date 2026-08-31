@@ -61,7 +61,7 @@ export function renderNav({ profile = null, active } = {}) {
     <nav class="sticky top-0 z-50 bg-paper/90 backdrop-blur border-b border-line">
       <div class="max-w-6xl mx-auto px-5 sm:px-6 py-3 flex items-center justify-between gap-4">
         <a href="${home}" class="flex flex-col leading-none">
-          <span class="font-display font-extrabold text-2xl tracking-tight text-ink">DISPATCH</span>
+          <span class="font-display font-extrabold text-2xl tracking-tight text-ink">GUILDWORK</span>
           <span class="hidden sm:block font-mono text-[9px] tracking-[0.22em] text-inksoft mt-0.5">FIELD SERVICES, ON DEMAND</span>
         </a>
 
