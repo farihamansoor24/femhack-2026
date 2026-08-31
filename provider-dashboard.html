@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provider Dashboard — GUILDWORK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        ink:'#F3F0E8', inksoft:'#9DA6A0', canvas:'#0E1310', paper:'#19211D', line:'#2C3833',
+        rust:'#E2703F', rustdark:'#A8451F', denim:'#5B93C0', denimlight:'#84B4D8', ok:'#4FAE86', amber:'#D9A441'
+      },
+      fontFamily: {
+        sans:['Inter','ui-sans-serif','sans-serif'],
+        display:['"Big Shoulders Display"','sans-serif'],
+        mono:['"IBM Plex Mono"','ui-monospace','monospace']
+      }
+    }}
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body class="bg-canvas text-ink font-sans antialiased [color-scheme:dark]">
+
+<div id="nav-root"></div>
+
+<header class="border-b border-line bg-paper">
+  <div class="max-w-6xl mx-auto px-6 py-10" id="dash-head">
+    <span class="font-mono text-xs uppercase tracking-wide text-rust" id="ticket-count">Loading…</span>
+    <h1 class="font-display font-extrabold text-4xl sm:text-5xl mt-2">Job requests</h1>
+    <div class="flex gap-2 mt-6 overflow-x-auto pb-1" id="dash-tabs">
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide bg-rustdark text-white" data-show="all">All</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="pending">New requests</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="accepted">Accepted</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="in_progress">In progress</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="completed">Completed</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="rejected">Rejected</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-10 pb-24">
+  <div id="booking-list" class="grid gap-4"><div class="font-mono text-sm text-inksoft py-10">Loading job requests…</div></div>
+</main>
+
+<script type="module" src="provider-dashboard.js"></script>
+</body>
+</html>

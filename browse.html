@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Pros — GUILDWORK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        ink:'#F3F0E8', inksoft:'#9DA6A0', canvas:'#0E1310', paper:'#19211D', line:'#2C3833',
+        rust:'#E2703F', rustdark:'#A8451F', denim:'#5B93C0', denimlight:'#84B4D8', ok:'#4FAE86', amber:'#D9A441'
+      },
+      fontFamily: {
+        sans:['Inter','ui-sans-serif','sans-serif'],
+        display:['"Big Shoulders Display"','sans-serif'],
+        mono:['"IBM Plex Mono"','ui-monospace','monospace']
+      }
+    }}
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body class="bg-canvas text-ink font-sans antialiased [color-scheme:dark]">
+
+<div id="nav-root"></div>
+
+<header class="border-b border-line bg-paper">
+  <div class="max-w-6xl mx-auto px-6 py-10" id="browse-head">
+    <span class="font-mono text-xs uppercase tracking-wide text-rust" id="result-count">Loading pros…</span>
+    <h1 class="font-display font-extrabold text-4xl sm:text-5xl mt-2">Find a local pro</h1>
+    <div class="max-w-md mt-6">
+      <input type="text" id="search-input" placeholder="Search by name or trade (e.g. Plumbing)"
+        class="w-full rounded-lg border border-line px-4 py-3 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-10 pb-24">
+  <div id="results-list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="col-span-full font-mono text-sm text-inksoft py-10">Loading providers…</div>
+  </div>
+</main>
+
+<script type="module" src="./js/browse.js"></script>
+</body>
+</html>

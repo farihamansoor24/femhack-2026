@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Bookings — GUILDWORK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        ink:'#F3F0E8', inksoft:'#9DA6A0', canvas:'#0E1310', paper:'#19211D', line:'#2C3833',
+        rust:'#E2703F', rustdark:'#A8451F', denim:'#5B93C0', denimlight:'#84B4D8', ok:'#4FAE86', amber:'#D9A441'
+      },
+      fontFamily: {
+        sans:['Inter','ui-sans-serif','sans-serif'],
+        display:['"Big Shoulders Display"','sans-serif'],
+        mono:['"IBM Plex Mono"','ui-monospace','monospace']
+      }
+    }}
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body class="bg-canvas text-ink font-sans antialiased [color-scheme:dark]">
+
+<div id="nav-root"></div>
+
+<header class="border-b border-line bg-paper">
+  <div class="max-w-6xl mx-auto px-6 py-10" id="dash-head">
+    <span class="font-mono text-xs uppercase tracking-wide text-rust" id="ticket-count">Loading…</span>
+    <h1 class="font-display font-extrabold text-4xl sm:text-5xl mt-2">My bookings</h1>
+    <div class="flex gap-2 mt-6 overflow-x-auto pb-1" id="dash-tabs">
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide bg-rustdark text-white" data-show="all">All</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="pending">Pending</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="accepted">Accepted</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="in_progress">In progress</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="completed">Completed</button>
+      <button class="dash-tab whitespace-nowrap px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wide text-inksoft hover:bg-white" data-show="rejected">Rejected</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-10 pb-24">
+  <div id="booking-list" class="grid gap-4"><div class="font-mono text-sm text-inksoft py-10">Loading your bookings…</div></div>
+</main>
+
+<!-- Review modal -->
+<div class="fixed inset-0 bg-black/70 z-[200] hidden items-center justify-center p-5" id="review-modal">
+  <div class="w-full max-w-md bg-paper border border-line rounded-2xl shadow-xl p-7" id="review-box">
+    <h3 class="text-lg font-semibold">Rate this job</h3>
+    <p class="text-inksoft text-sm mt-1" id="review-context"></p>
+    <div id="review-error" class="hidden mt-4 rounded-xl border border-rust bg-rust/10 text-rust font-mono text-xs px-4 py-3"></div>
+    <div class="flex gap-2 mt-5" id="star-row">
+      <button type="button" class="star-btn text-3xl text-white/15 hover:text-rust transition" data-value="1">★</button>
+      <button type="button" class="star-btn text-3xl text-white/15 hover:text-rust transition" data-value="2">★</button>
+      <button type="button" class="star-btn text-3xl text-white/15 hover:text-rust transition" data-value="3">★</button>
+      <button type="button" class="star-btn text-3xl text-white/15 hover:text-rust transition" data-value="4">★</button>
+      <button type="button" class="star-btn text-3xl text-white/15 hover:text-rust transition" data-value="5">★</button>
+    </div>
+    <div class="mt-4">
+      <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="review-comment">Comment</label>
+      <textarea id="review-comment" rows="3" placeholder="How did the job go?"
+        class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim resize-y"></textarea>
+    </div>
+    <div class="flex gap-3 mt-6">
+      <button class="px-4 py-2.5 rounded-lg border border-line text-sm font-mono uppercase tracking-wide text-inksoft hover:text-ink hover:border-ink transition" id="review-cancel">Cancel</button>
+      <button class="flex-1 bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide py-2.5 rounded-lg transition" id="review-submit">Submit review</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="customer-dashboard.js"></script>
+</body>
+</html>

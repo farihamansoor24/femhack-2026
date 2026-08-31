@@ -1,92 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <!-- Fonts -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — GUILDWORK</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-<!-- Tailwind (CDN, config extended in a script tag below) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          ink: '#1B2430',
-          ink2: '#232E3D',
-          paper: '#F5F1E6',
-          paper2: '#EDE7D6',
-          brass: '#C08A28',
-          brasslight: '#E4B75E',
-          rust: '#B14A2E',
-          forest: '#2F6F4E',
-          slate2: '#4B5563',
-        },
-        fontFamily: {
-          display: ['Fraunces', 'serif'],
-          body: ['Inter', 'sans-serif'],
-          mono: ['IBM Plex Mono', 'monospace'],
-        },
+    theme: { extend: {
+      colors: {
+        ink:'#F3F0E8', inksoft:'#9DA6A0', canvas:'#0E1310', paper:'#19211D', line:'#2C3833',
+        rust:'#E2703F', rustdark:'#A8451F', denim:'#5B93C0', denimlight:'#84B4D8', ok:'#4FAE86', amber:'#D9A441'
       },
-    },
-  };
+      fontFamily: {
+        sans:['Inter','ui-sans-serif','sans-serif'],
+        display:['"Big Shoulders Display"','sans-serif'],
+        mono:['"IBM Plex Mono"','ui-monospace','monospace']
+      }
+    }}
+  }
 </script>
-<!-- GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-<link rel="stylesheet" href="./css/styles.css" />
 </head>
-<body class="bg-paper text-ink font-body antialiased">
-   
-    <section class="max-w-md mx-auto px-5 py-16 sm:py-24">
-      <div class="ticket pl-9 pr-6 sm:pr-8 py-9">
-        <div class="ticket-notch"></div>
-        <p class="eyebrow mb-2">Welcome back</p>
-        <h1 class="font-display text-2xl mb-6">Log in to Guildwork</h1>
+<body class="bg-canvas text-ink font-sans antialiased min-h-screen [color-scheme:dark]">
 
-        <form id="login-form" novalidate class="space-y-4">
-          <div>
-            <label class="text-sm font-medium block mb-1.5" for="email">Email</label>
-            <input id="email" name="email" type="email" required
-              class="w-full px-4 py-3 border border-ink/10 rounded-sm text-sm focus:border-brass outline-none" />
-          </div>
-          <div>
-            <label class="text-sm font-medium block mb-1.5" for="password">Password</label>
-            <input id="password" name="password" type="password" required
-              class="w-full px-4 py-3 border border-ink/10 rounded-sm text-sm focus:border-brass outline-none" />
-          </div>
-          <button type="submit" id="submit-btn" class="w-full bg-ink text-paper font-semibold py-3.5 rounded-sm hover:bg-ink2 transition-colors">
-            Log in
-          </button>
-              <!-- Google Auth Button -->
-            <button type="button" id="googleAuthBtn" class="w-full flex items-center justify-center gap-3 py-3.5 px-4 bg-white border border-slate-200 rounded-2xl text-xs font-bold uppercase tracking-widest text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 shadow-sm active:scale-[0.99]">
-              <svg class="w-4 h-4" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-              </svg>
-              <span>Continue with Google</span>
-            </button>
-        </form>
+<div class="min-h-screen flex items-center justify-center px-5 py-10">
+  <div class="w-full max-w-md bg-paper border border-line rounded-2xl shadow-sm p-8 sm:p-10" id="auth-card">
 
-        <p class="text-sm text-slate2 mt-6 text-center">
-          New here? <a href="register.html" data-link class="text-brass font-semibold">Create an account</a>
-        </p>
-      </div>
-    </section>
-      <!-- ===== Toast ===== -->
-  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden">
-    <div id="toast-body" class="bg-ink text-paper text-sm font-medium px-5 py-3 rounded-sm shadow-xl border border-brass/40"></div>
+    <div class="flex flex-col items-center text-center mb-7">
+      <span class="font-display font-extrabold text-3xl tracking-tight text-ink">GUILDWORK</span>
+      <span class="font-mono text-[10px] tracking-[0.22em] text-inksoft mt-1">FIELD SERVICES, ON DEMAND</span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-1 p-1 bg-canvas rounded-xl mb-7">
+      <button class="auth-tab active-tab py-2.5 rounded-lg text-xs font-mono uppercase tracking-wide transition" data-tab="login">Log in</button>
+      <button class="auth-tab py-2.5 rounded-lg text-xs font-mono uppercase tracking-wide transition text-inksoft" data-tab="signup">Sign up</button>
+    </div>
+
+    <!-- GOOGLE AUTH BUTTON -->
+    <button type="button" id="google-auth-btn" class="w-full flex items-center justify-center gap-3 bg-canvas border border-line hover:border-inksoft text-ink font-mono text-xs uppercase tracking-wide py-3 px-4 rounded-lg transition mb-6">
+      <svg class="w-4 h-4" viewBox="0 0 24 24">
+        <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/>
+        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/>
+        <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.4 0 15.3c0 2.9.7 5.6 1.9 8l3.7-2.9z"/>
+        <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16C3.7 19.7 7.5 22.3 12 23z"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div class="relative flex py-2 items-center mb-6">
+      <div class="flex-grow border-t border-line"></div>
+      <span class="flex-shrink mx-4 font-mono text-[10px] uppercase tracking-wider text-inksoft">Or with email</span>
+      <div class="flex-grow border-t border-line"></div>
+    </div>
+
+    <div id="error-banner" class="hidden mb-5 rounded-xl border border-rust bg-rust/10 text-rust font-mono text-xs px-4 py-3"></div>
+    <div id="success-banner" class="hidden mb-5 rounded-xl border border-ok bg-ok/10 text-ok font-mono text-xs px-4 py-3"></div>
+
+    <!-- LOG IN -->
+    <div class="auth-panel" id="login-panel">
+      <form id="login-form" novalidate class="space-y-4">
+        <div>
+          <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="login-email">Email</label>
+          <input type="email" id="login-email" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+          <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="login-email-error">Enter a valid email address.</p>
+        </div>
+        <div>
+          <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="login-password">Password</label>
+          <input type="password" id="login-password" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+          <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="login-password-error">Password is required.</p>
+        </div>
+        <div>
+              <a href="# " class="text-rust block font-mono text-[11px] uppercase tracking-wide mb-1.5" for="signup-bio" id="forgotPasswordLink">Forgot Password</a>
+              
+        </div>
+        <button type="submit" class="w-full bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide py-3 rounded-lg transition">Log in</button>
+       
+      </form>
+    </div>
+
+    <!-- SIGN UP -->
+    <div class="auth-panel hidden" id="signup-panel">
+      <form id="signup-form" novalidate class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="role-option selected border-2 border-rust bg-rust/10 text-rust rounded-lg py-2.5 text-center text-xs font-mono uppercase tracking-wide cursor-pointer" data-role="customer">I need a service</div>
+          <div class="role-option border-2 border-line text-inksoft rounded-lg py-2.5 text-center text-xs font-mono uppercase tracking-wide cursor-pointer" data-role="provider">I provide a service</div>
+        </div>
+        <input type="hidden" id="signup-role" value="customer">
+
+        <div>
+          <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="signup-name">Full name</label>
+          <input type="text" id="signup-name" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+          <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="signup-name-error">Name is required.</p>
+        </div>
+        <div>
+          <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="signup-email">Email</label>
+          <input type="email" id="signup-email" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+          <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="signup-email-error">Enter a valid email address.</p>
+        </div>
+        <div>
+          <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="signup-password">Password</label>
+          <input type="password" id="signup-password" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+          <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="signup-password-error">Minimum 6 characters.</p>
+        </div>
+
+        <div class="hidden space-y-4" id="provider-fields">
+          <div>
+            <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="signup-trade">Trade / service category</label>
+            <input type="text" id="signup-trade" placeholder="e.g. Plumbing" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+            <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="signup-trade-error">Trade is required for providers.</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="signup-rate">Hourly rate ($)</label>
+              <input type="number" id="signup-rate" min="0" placeholder="85" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+            </div>
+            <div>
+              <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="signup-bio">Short bio</label>
+              <input type="text" id="signup-bio" placeholder="11 years experience…" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+            </div>
+          </div>
+          
+        </div>
+
+        <button type="submit" class="w-full bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide py-3 rounded-lg transition">Create account</button>
+      </form>
+    </div>
+
   </div>
+</div>
+<!-- FORGOT PASSWORD MODAL -->
+<div id="forgot-password-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-canvas/80 backdrop-blur-sm px-5">
+  <div class="w-full max-w-md bg-paper border border-line rounded-2xl shadow-xl p-8 sm:p-10 relative">
+    <button id="close-modal-btn" type="button" class="absolute top-5 right-5 text-inksoft hover:text-ink font-mono text-lg font-bold">✕</button>
+    
+    <div class="mb-6">
+      <h3 class="font-display font-bold text-2xl tracking-tight text-ink">Reset Password</h3>
+      <p class="font-mono text-xs text-inksoft mt-1">Enter your account email to receive a password reset link.</p>
+    </div>
 
-<script type="module" src="./js/main.js"></script>
-<script type="module" src="./js/ui/login.js"></script>
-
+    <form id="forgot-password-form" novalidate class="space-y-4">
+      <div>
+        <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="reset-email">Email Address</label>
+        <input type="email" id="reset-email" placeholder="name@domain.com" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+        <p class="hidden field-error mt-1.5 text-xs font-mono text-rust"  id="modalStatus"></p>
+      </div>
+      
+      <button type="submit" class="w-full bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide py-3 rounded-lg transition">Send Reset Link</button>
+    </form>
+  </div>
+</div>
+<script type="module" src="login.js"></script>
 </body>
 </html>

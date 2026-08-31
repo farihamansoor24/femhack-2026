@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Profile — GUILDWORK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        ink:'#F3F0E8', inksoft:'#9DA6A0', canvas:'#0E1310', paper:'#19211D', line:'#2C3833',
+        rust:'#E2703F', rustdark:'#A8451F', denim:'#5B93C0', denimlight:'#84B4D8', ok:'#4FAE86', amber:'#D9A441'
+      },
+      fontFamily: {
+        sans:['Inter','ui-sans-serif','sans-serif'],
+        display:['"Big Shoulders Display"','sans-serif'],
+        mono:['"IBM Plex Mono"','ui-monospace','monospace']
+      }
+    }}
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body class="bg-canvas text-ink font-sans antialiased [color-scheme:dark]">
+
+<div id="nav-root"></div>
+
+<header class="border-b border-line bg-paper">
+  <div class="max-w-4xl mx-auto px-6 py-10" id="head-block">
+    <span class="font-mono text-xs uppercase tracking-wide text-rust">Account</span>
+    <h1 class="font-display font-extrabold text-4xl sm:text-5xl mt-2">Edit profile</h1>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-10 pb-24 grid md:grid-cols-[260px_1fr] gap-8 items-start">
+
+  <!-- Photo uploader -->
+  <div class="bg-paper border border-line rounded-2xl shadow-sm p-6 text-center" id="photo-card">
+    <div class="relative w-32 h-32 mx-auto mb-5" id="avatar-wrap">
+      <div class="w-32 h-32 rounded-full overflow-hidden bg-denim flex items-center justify-center text-white font-display font-bold text-4xl" id="avatar-preview">
+        --
+      </div>
+      <div class="absolute inset-[-4px] rounded-full ring-4 ring-rust opacity-0 pointer-events-none" id="avatar-ring"></div>
+    </div>
+
+    <label for="photo-input" class="block cursor-pointer rounded-xl border-2 border-dashed border-line hover:border-rust hover:bg-rust/10 transition px-4 py-4" id="dropzone">
+      <span class="font-mono text-[11px] text-inksoft" id="dropzone-label">Click or drag a photo here</span>
+      <input type="file" id="photo-input" accept="image/png,image/jpeg,image/webp,image/gif" class="hidden">
+    </label>
+
+    <div class="h-1 rounded-full bg-line mt-4 overflow-hidden hidden" id="upload-progress-wrap">
+      <div class="h-full bg-rust transition-all duration-200" id="upload-progress-bar" style="width:0%"></div>
+    </div>
+
+    <p class="font-mono text-[10px] text-inksoft mt-3">JPG, PNG, WEBP or GIF · up to 5MB</p>
+  </div>
+
+  <!-- Profile form -->
+  <div class="bg-paper border border-line rounded-2xl shadow-sm p-7" id="form-card">
+    <h3 class="text-lg font-semibold mb-6">Your details</h3>
+
+    <div id="form-error" class="hidden mb-5 rounded-xl border border-rust bg-rust/10 text-rust font-mono text-xs px-4 py-3"></div>
+    <div id="form-success" class="hidden mb-5 rounded-xl border border-ok bg-ok/10 text-ok font-mono text-xs px-4 py-3"></div>
+
+    <form id="profile-form" novalidate class="space-y-5">
+      <div>
+        <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="name">Full name</label>
+        <input type="text" id="name" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+        <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="name-error">Name is required.</p>
+      </div>
+      <div>
+        <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="email">Email ID</label>
+        <input type="email" id="email" disabled class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+        <!-- <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="name-error">Email is required.</p> -->
+      </div>
+      <div>
+        <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="bio">Bio</label>
+        <textarea id="bio" rows="3" placeholder="Tell customers a bit about yourself…"
+          class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim resize-y"></textarea>
+      </div>
+
+      <div id="provider-only" class="hidden space-y-5">
+        <div>
+          <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="trade">Trade / service category</label>
+          <input type="text" id="trade" placeholder="e.g. Plumbing" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+          <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="trade-error">Trade is required.</p>
+        </div>
+        <div>
+          <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="hourlyRate">Hourly rate ($)</label>
+          <input type="number" id="hourlyRate" min="0" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+        </div>
+      </div>
+
+      <button type="submit" class="bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide px-6 py-3 rounded-lg transition">Save changes</button>
+      <button type="button" class="bg-white hover:bg-rust text-black font-mono text-sm uppercase tracking-wide px-6 py-3 rounded-lg transition" onclick="window.location.href='provider-dashboard.html'">Cancel</button>
+    </form>
+  </div>
+</main>
+
+<script type="module" src="edit-profile.js"></script>
+</body>
+</html>

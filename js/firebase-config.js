@@ -1,24 +1,19 @@
 // ===========================================================
-// Firebase configuration
-// -----------------------------------------------------------
-// 1. Go to https://console.firebase.google.com → create a project
-// 2. Project settings → General → "Your apps" → Web app → copy the config
-// 3. Paste the values below (replace every "REPLACE_ME")
-// 4. In the Firebase console enable:
-//      - Authentication → Sign-in method → Email/Password
-//      - Firestore Database → Create database (start in test mode,
-//        then apply the rules from README.md before going live)
+// firebase-config.js
+// Replace the values below with YOUR Firebase project's config.
+// Firebase Console -> Project Settings -> General -> Your apps -> SDK setup and config
 // ===========================================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getAuth,
-  setPersistence,
-  browserLocalPersistence,
-  signInWithPopup,GoogleAuthProvider
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getAuth,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
+import { getFirestore,doc, setDoc, getDoc, serverTimestamp,collection, addDoc, updateDoc, getDocs,
+  query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+// import { firebaseConfig } from "./js/firebase-config.js";
   const firebaseConfig = {
     apiKey: "AIzaSyBdlc5utTTo5kloBxQucpwja-Q0F6Wh-7I",
     authDomain: "femhack-2026-aede7.firebaseapp.com",
@@ -28,18 +23,16 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebas
     appId: "1:43546147543:web:bce4f7200f2aa1ea758e92",
     measurementId: "G-5Q0JVBR0WS"
   };
-export const isFirebaseConfigured = !Object.values(firebaseConfig).some(
-  (v) => typeof v === "string" && v.includes("REPLACE_ME")
-);
 
-let app, auth, db;
 
-if (isFirebaseConfigured) {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-  // Keep the customer/provider logged in across refreshes.
-  setPersistence(auth, browserLocalPersistence).catch(() => {});
-}
+const app = initializeApp(firebaseConfig);
 
-export { app, auth, db ,signInWithPopup,GoogleAuthProvider};
+ const auth = getAuth(app);
+ const db = getFirestore(app);
+export { db,auth, getAuth,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup ,
+  doc, setDoc, getDoc, serverTimestamp,getFirestore,collection, addDoc, updateDoc, getDocs,
+  query, where, orderBy}

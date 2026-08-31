@@ -1,0 +1,85 @@
+// ===========================================================
+// firestore.rules
+// Firebase Console -> Firestore Database -> Rules -> paste -> Publish
+// ===========================================================
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() { return request.auth != null; }
+    function isSelf(uid) { return isSignedIn() && request.auth.uid == uid; }
+    function userRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    // ---------------- users ----------------
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow create: if isSelf(uid);
+      // A user can edit their own profile (name, bio, trade, hourlyRate,
+      // profileImageUrl, etc.) but can never change their own role, and
+      // can never touch anyone else's document.
+      allow update: if isSelf(uid) && request.resource.data.role == resource.data.role;
+      allow delete: if false;
+    }
+
+    // ---------------- bookings ----------------
+    match /bookings/{bookingId} {
+      allow read: if isSignedIn() &&
+        (resource.data.customerId == request.auth.uid || resource.data.providerId == request.auth.uid);
+
+      allow create: if isSignedIn() &&
+        userRole() == 'customer' &&
+        request.resource.data.customerId == request.auth.uid &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.service is string && request.resource.data.service.size() > 0 &&
+        request.resource.data.preferredDate is string &&
+        request.resource.data.preferredTime is string;
+
+      // Status transitions follow the same state machine as db.js:
+      // pending -> accepted/rejected -> in_progress -> completed.
+      // rejected and completed are terminal.
+      allow update: if isSignedIn() && (
+        (
+          resource.data.providerId == request.auth.uid &&
+          (
+            (resource.data.status == 'pending' && request.resource.data.status in ['accepted', 'rejected']) ||
+            (resource.data.status == 'accepted' && request.resource.data.status == 'in_progress') ||
+            (resource.data.status == 'in_progress' && request.resource.data.status == 'completed')
+          )
+        )
+        ||
+        (
+          resource.data.customerId == request.auth.uid &&
+          resource.data.status == 'completed' &&
+          resource.data.reviewed == false &&
+          request.resource.data.reviewed == true &&
+          request.resource.data.status == resource.data.status
+        )
+      );
+
+      allow delete: if false;
+    }
+
+    // ---------------- reviews ----------------
+    // Doc ID == booking ID — physically prevents a second review on
+    // the same booking.
+    match /reviews/{bookingReviewId} {
+      allow read: if isSignedIn();
+
+      allow create: if isSignedIn() &&
+        request.resource.data.customerId == request.auth.uid &&
+        request.resource.data.bookingId == bookingReviewId &&
+        !exists(/databases/$(database)/documents/reviews/$(bookingReviewId)) &&
+        get(/databases/$(database)/documents/bookings/$(bookingReviewId)).data.status == 'completed' &&
+        get(/databases/$(database)/documents/bookings/$(bookingReviewId)).data.customerId == request.auth.uid &&
+        request.resource.data.rating is number &&
+        request.resource.data.rating >= 1 && request.resource.data.rating <= 5;
+
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}

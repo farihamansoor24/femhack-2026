@@ -1,154 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Guildwork — Find trusted local service providers</title>
-<meta name="description" content="Guildwork connects customers with trusted local service providers — book, track, and review, all in one place." />
-
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-<!-- Tailwind (CDN, config extended in a script tag below) -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUILDWORK</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          ink: '#1B2430',
-          ink2: '#232E3D',
-          paper: '#F5F1E6',
-          paper2: '#EDE7D6',
-          brass: '#C08A28',
-          brasslight: '#E4B75E',
-          rust: '#B14A2E',
-          forest: '#2F6F4E',
-          slate2: '#4B5563',
-        },
-        fontFamily: {
-          display: ['Fraunces', 'serif'],
-          body: ['Inter', 'sans-serif'],
-          mono: ['IBM Plex Mono', 'monospace'],
-        },
-      },
-    },
-  };
+  tailwind.config = { theme: { extend: { colors: { ink:'#F3F0E8', inksoft:'#9DA6A0', canvas:'#0E1310' },
+    fontFamily: { mono:['"IBM Plex Mono"','ui-monospace','monospace'] } } } }
 </script>
-
-<!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-<link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap">
 </head>
-<body class="bg-paper text-ink font-body antialiased">
-
- <!-- ===== Top bar ===== -->
-<header id="site-header" class="sticky top-0 z-40 bg-paper/90 backdrop-blur border-b border-ink/10">
-  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-    <a href="index.html" class="flex items-center gap-2 group">
-      <span class="w-8 h-8 rounded-sm bg-ink flex items-center justify-center rotate-[-4deg] group-hover:rotate-0 transition-transform duration-300">
-        <span class="text-brasslight font-display font-bold text-sm">G</span>
-      </span>
-      <span class="font-display font-semibold text-xl tracking-tight">Guildwork</span>
-    </a>
-
-    <!-- Desktop Nav Links -->
-    <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate2">
-      <a href="index.html" class="hidden hover:text-ink transition-colors" id="browse">Browse</a>
-      <a href="#/dashboard/customer" data-auth="customer" class="hidden hover:text-ink transition-colors">My bookings</a>
-      <a href="#/dashboard/provider" data-auth="provider" class="hidden hover:text-ink transition-colors">Job requests</a>
-    </nav>
-
-    <div class="flex items-center gap-3">
-      <!-- Guest / Logged-in Auth Box -->
-      <div id="nav-guest" class="flex items-center gap-3">
-        <a href="login.html" class="text-sm font-medium text-slate2 hover:text-ink transition-colors">Log in</a>
-        <a href="register.html" class="text-sm font-semibold bg-ink text-paper px-4 py-2 rounded-sm hover:bg-ink2 transition-colors">Get started</a>
-      </div>
-      <div id="nav-user" class="hidden items-center gap-3">
-        <span id="nav-user-name" class="hidden sm:inline text-sm text-slate2"></span>
-        <button id="btn-logout" class="text-sm font-medium border border-ink/20 px-4 py-2 rounded-sm hover:bg-ink hover:text-paper transition-colors">Log out</button>
-      </div>
-
-      <!-- Mobile Menu Toggle Button (Small Screens) -->
-      <button id="btn-mobile-menu" aria-label="Toggle Menu" class="md:hidden p-2 text-ink hover:text-brass focus:outline-none">
-        <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-        <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-<!-- Mobile Dropdown Nav Menu -->
-<div id="mobile-menu" class="hidden md:hidden border-t border-ink/10 bg-paper px-5 py-4 flex-col gap-3 text-sm font-medium text-slate2">
-  <a href="index.html" class="hover:text-ink py-1">Browse</a>
-  <a href="login.html" id="loginLink" class="text-sm font-medium text-slate2 hover:text-ink transition-colors py-1">Log in</a>
-        <a href="register.html" id="registerLink" class="text-sm font-medium  text-slate2 py-1 m hover:text-ink transition-colors">Get started</a>
-  
-  <!-- Logged-in Customer Links -->
-  <a href="customer-dashboard.html" data-auth="customer" class="hidden hover:text-ink py-1">My bookings</a>
-  
-  <!-- Logged-in Provider Links -->
-  <a href="provider-dashboard.html" data-auth="provider" class="hidden hover:text-ink py-1">Job requests</a>
-</div>
-</header>
-
-  <!-- config banner -->
-  <div id="config-banner" class="hidden bg-rust text-paper text-sm px-5 py-3 text-center"></div>
-
-  <!-- ===== App root ===== -->
-  <main id="app" class="min-h-[70vh]"></main>
-
-  <!-- ===== Footer ===== -->
-  <footer class="border-t border-ink/10 mt-20">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <span class="w-6 h-6 rounded-sm bg-ink flex items-center justify-center">
-          <span class="text-brasslight font-display font-bold text-xs">G</span>
-        </span>
-        <span class="font-display text-base">Guildwork</span>
-      </div>
-      <p class="text-xs text-slate2">Every booking gets a ticket. Every ticket gets seen through.</p>
-    </div>
-  </footer>
-
-  <!-- ===== Toast ===== -->
-  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden">
-    <div id="toast-body" class="bg-ink text-paper text-sm font-medium px-5 py-3 rounded-sm shadow-xl border border-brass/40"></div>
-  </div>
-
-  <script type="module" src="js/main.js"></script>
-  <script>
-    // Mobile menu toggle handling
-// Mobile menu toggle handling
-const btnMobileMenu = document.getElementById("btn-mobile-menu");
-const mobileMenu = document.getElementById("mobile-menu");
-const iconOpen = document.getElementById("menu-icon-open");
-const iconClose = document.getElementById("menu-icon-close");
-
-if (btnMobileMenu && mobileMenu) {
-  btnMobileMenu.addEventListener("click", () => {
-    const isHidden = mobileMenu.classList.contains("hidden");
-    if (isHidden) {
-      mobileMenu.classList.remove("hidden");
-      mobileMenu.classList.add("flex");
-      iconOpen?.classList.add("hidden");
-      iconClose?.classList.remove("hidden");
-    } else {
-      mobileMenu.classList.add("hidden");
-      mobileMenu.classList.remove("flex");
-      iconOpen?.classList.remove("hidden");
-      iconClose?.classList.add("hidden");
-    }
-  });
-}
+<body class="bg-canvas min-h-screen flex items-center justify-center [color-scheme:dark]">
+  <div class="font-mono text-sm text-inksoft">Loading GUILDWORK…</div>
+  <script type="module" src="./js/index.js">
+   
   </script>
 </body>
 </html>

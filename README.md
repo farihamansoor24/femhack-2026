@@ -1,138 +1,113 @@
-# Guildwork — local service marketplace (MVP)
+# GUILDWORK — Service Booking App (Tailwind + GSAP + Firebase + Cloudinary)
 
-A fully functional booking marketplace built with **HTML + Tailwind CSS (CDN) +
-vanilla JavaScript (ES modules) + Firebase (Auth & Firestore) + GSAP**. No
-build step, no framework — open it in a browser once Firebase is configured.
+Plain JavaScript (ES modules, no framework/bundler), styled with the
+Tailwind Play CDN, animated with GSAP, backed by Firebase Auth + Firestore,
+with provider profile photos uploaded straight to Cloudinary.
 
-## What's included
+## 1. Firebase setup
 
-- Responsive home page with search + category filter and 6 seeded provider
-  listings (auto-created in Firestore the first time the app runs).
-- Provider detail page (name, service, location, experience, price, rating, reviews).
-- Email/password auth for two roles: **customer** and **provider**.
-- Booking form (service, date, time, location, description) with validation
-  and a generated unique booking ID (e.g. `GW-M1A2B3-X9K2`).
-- Customer dashboard with live booking status + star review form once a job
-  is completed.
-- Provider dashboard with live incoming bookings, Accept/Reject, then
-  In&nbsp;Progress → Completed transitions.
-- All data lives in Firestore, so refreshing the page never loses anything.
-- GSAP-driven motion: hero intro, staggered card reveals, and a "rubber
-  stamp" bounce whenever a booking's status changes.
+1. https://console.firebase.google.com → create a project.
+2. **Build → Authentication → Sign-in method** → enable **Email/Password**.
+3. **Build → Firestore Database** → create database (production mode).
+4. **Project settings → General → Your apps → Web app** → copy the config
+   into `firebase-config.js`.
+5. **Firestore → Rules** → paste `firestore.rules` → Publish.
+6. First run of the app will hit two queries combining `where` + `orderBy`
+   (bookings for customer / for provider). Firestore's console error gives
+   you a **link that auto-creates the needed index** — click it once per
+   query, then retry.
 
-## 1. Create a Firebase project
+## 2. Cloudinary setup (profile photo upload)
 
-1. Go to the [Firebase console](https://console.firebase.google.com) → **Add project**.
-2. Inside the project, click the **`</>` (Web) icon** to register a web app and
-   copy the `firebaseConfig` object it gives you.
-3. Open `js/firebase-config.js` in this project and paste your values in place
-   of every `"REPLACE_ME"`.
+1. https://cloudinary.com → create a free account → copy your **Cloud name**
+   from the dashboard.
+2. **Settings → Upload → Upload presets → Add upload preset**.
+   - Set **Signing mode = Unsigned** (required — this is what lets the
+     browser upload directly with no backend/API secret).
+   - Optionally restrict it to an images-only folder, set a max file size,
+     or add moderation.
+3. Put both values into `cloudinary-config.js`:
+   ```js
+   export const cloudinaryConfig = {
+     cloudName: "your-cloud-name",
+     uploadPreset: "your-unsigned-preset",
+     folder: "GUILDWORK-profile-photos" // optional
+   };
+   ```
+That's the entire integration — `cloudinary.js` posts the file straight to
+`https://api.cloudinary.com/v1_1/<cloud_name>/image/upload` and Firestore
+only ever stores the resulting `secure_url` on `users/{uid}.profileImageUrl`.
 
-## 2. Turn on Authentication
+## 3. Running it
 
-Authentication → Sign-in method → enable **Email/Password**.
-
-## 3. Turn on Firestore
-
-Firestore Database → Create database → start in **test mode** (or paste the
-rules below right away).
-
-### Recommended security rules
-
-Paste this into Firestore → Rules once you're ready to lock things down:
-
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-
-    match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null && request.auth.uid == userId;
-    }
-
-    match /providers/{providerId} {
-      allow read: if true; // public directory
-      allow write: if request.auth != null && request.auth.uid == providerId;
-    }
-
-    match /bookings/{bookingId} {
-      allow create: if request.auth != null
-        && request.resource.data.customerId == request.auth.uid;
-
-      allow read: if request.auth != null
-        && (resource.data.customerId == request.auth.uid
-            || resource.data.providerId == request.auth.uid);
-
-      // Provider can change status; customer can only attach a review
-      // to their own, already-completed booking.
-      allow update: if request.auth != null && (
-        (resource.data.providerId == request.auth.uid
-          && request.resource.data.customerId == resource.data.customerId)
-        || (resource.data.customerId == request.auth.uid
-          && resource.data.status == 'completed'
-          && resource.data.review == null)
-      );
-    }
-  }
-}
-```
-
-## 4. Run it locally
-
-Because the app uses ES module `import`s, it must be served over `http://`,
-not opened directly as a `file://` path. Any static server works, for example:
-
-```bash
-cd service-marketplace
-python3 -m http.server 8080
-# then open http://localhost:8080
-```
-
-or, with Node installed:
+Static files + ES modules — serve over HTTP, not `file://`:
 
 ```bash
 npx serve .
 ```
 
-## 5. Try the full workflow
+Open `login.html` (or `index.html`, which redirects based on auth state).
 
-1. Register an account as a **customer** — browse providers from the home page.
-2. Open a provider, submit a booking (you'll get a ticket ID).
-3. In a second browser/incognito window, register as a **provider**, fill in
-   your profile (Manage profile), and note your bookings dashboard is empty
-   unless a customer books *you* specifically — book one of your own seeded
-   listings to test end-to-end, or have the customer book the provider
-   profile you just created.
-4. As the provider: **Accept** → **Start progress** → **Mark completed**.
-5. As the customer: refresh the dashboard, leave a **1–5 star review**.
+## 4. Pages
 
-## Project structure
+| Page | Purpose |
+|---|---|
+| `login.html` | Sign up (customer/provider) / log in |
+| `browse.html` | Customer: search & browse providers |
+| `provider.html?id=<uid>` | Provider profile + booking request form |
+| `customer-dashboard.html` | Customer: bookings, leave reviews |
+| `provider-dashboard.html` | Provider: requests, status actions |
+| `edit-profile.html` | **New** — edit name/bio/trade/rate + upload profile photo (Cloudinary) |
 
-```
-index.html                 shell: nav, fonts, Tailwind/GSAP/Firebase CDN tags
-css/styles.css              ticket/stamp signature styling, focus states
-js/firebase-config.js       your Firebase project config
-js/seed-data.js             categories + 6 demo providers
-js/auth.js                  register/login/logout, user profile doc
-js/db.js                    Firestore reads/writes for providers & bookings
-js/state.js                 tiny observable store for the current user
-js/router.js                hash router with auth/role guards
-js/animations.js            GSAP helpers (hero intro, stagger, stamp bounce)
-js/utils.js                 booking ID gen, toasts, validation, formatting
-js/ui/*.js                  one render function per screen
-js/main.js                  wires everything together
-```
+## 5. Dark theme
 
-## Business rules enforced in the UI + data layer
+The whole app now runs on a black/dark palette (`canvas #0E1310` page bg,
+`paper #19211D` cards, warm off-white `ink #F3F0E8` text). A few things
+worth knowing if you keep customizing colors:
 
-- Every booking gets a unique, generated `bookingId`.
-- The booking form validates all required fields before submit.
-- A review can only be submitted once a booking's status is `completed`,
-  and only once per booking (`db.js` → `submitReview` double-checks this
-  server-round-trip before writing, in addition to the UI hiding the form
-  once a review exists).
-- Status transitions are whitelisted in `db.js` (`ALLOWED_TRANSITIONS`) —
-  a rejected booking can never move to In Progress, and the UI only ever
-  renders the one next valid action per status.
-- Completed/rejected bookings show no edit controls.
+- `ink` is used for **text only** now, never as a solid fill — solid dark
+  buttons/active-tab states use `rustdark` (persistent) or `bg-neutral-800`
+  (neutral action buttons) instead, since a light "ink" can't double as a
+  dark button background.
+- Every form field has an explicit `bg-canvas` + `placeholder:text-inksoft/60`
+  — without that, browsers fall back to a stark white input box regardless
+  of page theme.
+- `<body>` carries `[color-scheme:dark]` so native browser chrome (date
+  pickers, checkboxes) renders dark-appropriate icons too.
+- The toast (`ui.js`) and the review-modal scrim use fixed hex/`bg-black`
+  values rather than theme tokens, so they stay legible even if you swap
+  the palette back to light later.
+
+## 6. What changed in this pass
+
+- **Styling** rebuilt on Tailwind (Play CDN, no build step) — rounded-2xl
+  cards, consistent spacing scale, shadow-sm/hover states, responsive grids.
+- **Color contrast** tightened: darker `ink` (#14201C) and `inksoft`
+  (#46554D) body text, darker status-badge colors (`amber`, `denim`,
+  `rustdark`, `ok`) so every badge and label clears WCAG AA against white
+  card backgrounds, and a visible `focus-visible` ring (`denim`) on every
+  interactive element for keyboard users.
+- **GSAP animations** (`anim.js`, shared): page/section fade-ins, staggered
+  card reveals on every list (browse grid, both dashboards), a spring-style
+  modal open/close for the review dialog, a shake on invalid form
+  submission, and a small pulse on successful actions (accept/reject/status
+  change, photo upload, save).
+- **Edit Profile page** — new. Name/bio for everyone; trade + hourly rate
+  for providers; a drag-and-drop (or click) photo uploader with a live
+  progress bar that uploads directly to Cloudinary and writes the resulting
+  URL onto the user's profile. Avatars (photo or initials fallback) now
+  show up in the nav, browse grid, and provider profile header.
+
+## 6. Business rules (unchanged, still centralized in `db.js`)
+
+| Rule | Where |
+|---|---|
+| Unique booking ID | Firestore's `addDoc()` auto-ID |
+| Required-field validation | inline UI checks + re-validated in `db.js` |
+| No review before completion | `submitReview()` checks `status === 'completed'` |
+| One review per booking | review doc ID *is* the booking ID + existence check |
+| Rejected → In Progress blocked | strict `ALLOWED_TRANSITIONS` state machine |
+| Completed can't be edited | same state machine; dashboard hides action buttons |
+
+`firestore.rules` enforces the same rules server-side, independent of the
+client — don't skip publishing it.
