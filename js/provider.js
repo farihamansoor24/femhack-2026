@@ -2,11 +2,11 @@
 // provider.js
 // ===========================================================
 
-import { requireAuth } from "./js/auth.js";
-import { getProvider, createBooking } from "./js/db.js";
+import { requireAuth } from "./auth.js";
+import { getProvider, createBooking } from "./db.js";
 import { renderNav } from "./nav.js";
 import { toast } from "./ui.js";
-import { fadeIn, shake, pulse } from "./js/anim.js";
+import { fadeIn, shake, pulse } from "./anim.js";
 
 const params = new URLSearchParams(window.location.search);
 const providerId = params.get("id");

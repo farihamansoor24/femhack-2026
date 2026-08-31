@@ -2,11 +2,11 @@
 // provider-dashboard.js
 // ===========================================================
 
-import { requireAuth } from "./js/auth.js";
-import { getBookingsForProvider, updateBookingStatus } from "./js/db.js";
+import { requireAuth } from "./auth.js";
+import { getBookingsForProvider, updateBookingStatus } from "./db.js";
 import { renderNav } from "./nav.js";
 import { toast } from "./ui.js";
-import { fadeIn, revealCards, pulse } from "./js/anim.js";
+import { fadeIn, revealCards, pulse } from "./anim.js";
 
 let currentUser, bookings = [];
 

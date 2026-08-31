@@ -2,12 +2,12 @@
 // edit-profile.js
 // ===========================================================
 
-import { requireAuth } from "./js/auth.js";
-import { updateUserProfile } from "./js/db.js";
+import { requireAuth } from "./auth.js";
+import { updateUserProfile } from "./db.js";
 import { renderNav } from "./nav.js";
 import { toast } from "./ui.js";
-import { fadeIn, shake, pulse } from "./js/anim.js";
-import { uploadToCloudinary, validateImageFile } from "./js/cloudinary.js";
+import { fadeIn, shake, pulse } from "./anim.js";
+import { uploadToCloudinary, validateImageFile } from "./cloudinary.js";
 
 let currentUser, currentProfile;
 let pendingImageUrl = null; // set once a new photo finishes uploading

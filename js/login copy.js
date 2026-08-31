@@ -3,8 +3,8 @@
 // ===========================================================
 
 import { auth,onAuthStateChanged,sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup,serverTimestamp,setDoc,doc,db  } from "./firebase-config.js";
-import { signUp, logIn, getUserProfile } from "./js/auth.js";
-import { fadeIn, shake } from "./js/anim.js";
+import { signUp, logIn, getUserProfile } from "./auth.js";
+import { fadeIn, shake } from "./anim.js";
 
 fadeIn("#auth-card", { duration: .5 });
 

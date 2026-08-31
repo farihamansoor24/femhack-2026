@@ -4,7 +4,7 @@
 // using an unsigned upload preset — no server needed.
 // ===========================================================
 
-// import { cloudinaryConfig } from "./js/cloudinary-config.js";
+// import { cloudinaryConfig } from "./cloudinary-config.js";
 const cloudinaryConfig = {
   cloudName: "bkvaftts",
   uploadPreset: "preset_femhack2026",

@@ -1,5 +1,5 @@
  import { auth,onAuthStateChanged } from "./firebase-config.js";
- import { getUserProfile } from "./js/auth.js";
+ import { getUserProfile } from "./auth.js";
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) { window.location.href = "login.html"; return; }

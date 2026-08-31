@@ -13,7 +13,7 @@ import { getAuth,
 
 import { getFirestore,doc, setDoc, getDoc, serverTimestamp,collection, addDoc, updateDoc, getDocs,
   query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-// import { firebaseConfig } from "./js/firebase-config.js";
+// import { firebaseConfig } from "./firebase-config.js";
   const firebaseConfig = {
     apiKey: "AIzaSyBdlc5utTTo5kloBxQucpwja-Q0F6Wh-7I",
     authDomain: "femhack-2026-aede7.firebaseapp.com",

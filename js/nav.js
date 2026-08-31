@@ -2,7 +2,7 @@
 // nav.js — renders the top nav into #nav-root
 // ===========================================================
 
-import { logOut } from "./js/auth.js";
+import { logOut } from "./auth.js";
 
 function avatarHtml(profile, size = "w-9 h-9 text-xs") {
   if (profile.profileImageUrl) {
