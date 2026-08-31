@@ -31,7 +31,7 @@ export function renderNav({ profile = null, active } = {}) {
   const links = !isLoggedIn
     ? [
         { href: "index.html", label: "Home", key: "home" },
-        { href: "browse.html", label: "Browse Pros", key: "browse" }
+        { href: "#providers-section", label: "Browse Providers", key: "browse" }
       ]
     : isProvider
     ? [{ href: "provider-dashboard.html", label: "Dashboard", key: "dashboard" }]
@@ -58,34 +58,34 @@ export function renderNav({ profile = null, active } = {}) {
       </div>`;
 
   root.innerHTML = `
-    <nav class="sticky top-0 z-50 bg-paper/90 backdrop-blur border-b border-line">
-      <div class="max-w-6xl mx-auto px-5 sm:px-6 py-3 flex items-center justify-between gap-4">
-        <a href="${home}" class="flex flex-col leading-none">
-          <span class="font-display font-extrabold text-2xl tracking-tight text-ink">GUILDWORK</span>
-          <span class="hidden sm:block font-mono text-[9px] tracking-[0.22em] text-inksoft mt-0.5">FIELD SERVICES, ON DEMAND</span>
-        </a>
+   <nav class="sticky top-0 z-50 bg-paper/50 backdrop-blur-lg border-b border-line/60 transition-colors">
+  <div class="max-w-6xl mx-auto px-5 sm:px-6 py-3 flex items-center justify-between gap-4">
+    <a href="${home}" class="flex flex-col leading-none">
+      <span class="font-display font-extrabold text-2xl tracking-tight text-ink">GUILDWORK</span>
+      <span class="hidden sm:block font-mono text-[9px] tracking-[0.22em] text-inksoft mt-0.5">FIELD SERVICES, ON DEMAND</span>
+    </a>
 
-        <ul class="hidden md:flex items-center gap-1">
-          ${links.map(l => `
-            <li>
-              <a href="${l.href}" class="px-3 py-2 rounded-lg text-sm font-medium transition
-                ${active === l.key ? "text-ink bg-canvas" : "text-inksoft hover:text-ink hover:bg-canvas"}">
-                ${l.label}
-              </a>
-            </li>`).join("")}
-        </ul>
+    <ul class="hidden md:flex items-center gap-1">
+      ${links.map(l => `
+        <li>
+          <a href="${l.href}" class="px-3 py-2 rounded-lg text-sm font-medium transition
+            ${active === l.key ? "text-ink bg-canvas" : "text-inksoft hover:text-ink hover:bg-canvas"}">
+            ${l.label}
+          </a>
+        </li>`).join("")}
+    </ul>
 
-        ${authControlsHtml}
-      </div>
+    ${authControlsHtml}
+  </div>
 
-      <ul class="md:hidden flex items-center gap-1 px-5 pb-3 overflow-x-auto">
-        ${links.map(l => `
-          <li>
-            <a href="${l.href}" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-sm font-medium
-              ${active === l.key ? "text-ink bg-canvas" : "text-inksoft"}">${l.label}</a>
-          </li>`).join("")}
-      </ul>
-    </nav>
+  <ul class="md:hidden flex items-center gap-1 px-5 pb-3 overflow-x-auto">
+    ${links.map(l => `
+      <li>
+        <a href="${l.href}" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-sm font-medium
+          ${active === l.key ? "text-ink bg-canvas" : "text-inksoft"}">${l.label}</a>
+      </li>`).join("")}
+  </ul>
+</nav>
   `;
 
   if (isLoggedIn) {
