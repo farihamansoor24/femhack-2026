@@ -33,10 +33,37 @@
   <div class="max-w-6xl mx-auto px-6 py-10" id="browse-head">
     <span class="font-mono text-xs uppercase tracking-wide text-rust" id="result-count">Loading pros…</span>
     <h1 class="font-display font-extrabold text-4xl sm:text-5xl mt-2">Find a local pro</h1>
-    <div class="max-w-md mt-6">
-      <input type="text" id="search-input" placeholder="Search by name or trade (e.g. Plumbing)"
-        class="w-full rounded-lg border border-line px-4 py-3 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+    
+    <!-- Search & Category Filter Section -->
+    <div class="mt-6 flex flex-col sm:flex-row gap-4 max-w-2xl">
+      <!-- Search Input -->
+      <div class="flex-1">
+        <input type="text" id="search-input" placeholder="Search by name or keyword..."
+          class="w-full rounded-lg border border-line px-4 py-3 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
+      </div>
+
+      <!-- Category Filter Dropdown -->
+      <div class="sm:w-56">
+        <select id="category-filter" class="w-full rounded-lg border border-line px-4 py-3 text-sm bg-canvas text-ink font-mono focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim cursor-pointer">
+          <option value="all">All Categories</option>
+          <option value="plumbing">Plumbing</option>
+          <option value="electrical">Electrical</option>
+          <option value="carpentry">Carpentry</option>
+          <option value="painting">Painting</option>
+          <option value="cleaning">Cleaning</option>
+        </select>
+      </div>
     </div>
+
+    <!-- Quick Filter Category Pills -->
+    <div class="mt-4 flex flex-wrap gap-2" id="category-pills">
+      <button data-category="all" class="pill-btn bg-rust text-white font-mono text-xs uppercase px-3 py-1.5 rounded-full border border-rust transition">All</button>
+      <button data-category="plumbing" class="pill-btn bg-canvas text-inksoft hover:text-ink font-mono text-xs uppercase px-3 py-1.5 rounded-full border border-line transition">Plumbing</button>
+      <button data-category="electrical" class="pill-btn bg-canvas text-inksoft hover:text-ink font-mono text-xs uppercase px-3 py-1.5 rounded-full border border-line transition">Electrical</button>
+      <button data-category="carpentry" class="pill-btn bg-canvas text-inksoft hover:text-ink font-mono text-xs uppercase px-3 py-1.5 rounded-full border border-line transition">Carpentry</button>
+      <button data-category="painting" class="pill-btn bg-canvas text-inksoft hover:text-ink font-mono text-xs uppercase px-3 py-1.5 rounded-full border border-line transition">Painting</button>
+    </div>
+
   </div>
 </header>
 

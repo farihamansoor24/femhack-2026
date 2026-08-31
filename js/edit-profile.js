@@ -1,5 +1,5 @@
 // ===========================================================
-// edit-profile.js
+// js/edit-profile.js
 // ===========================================================
 
 import { requireAuth } from "./auth.js";
@@ -30,7 +30,10 @@ function populateForm() {
 
   if (currentProfile.role === "provider") {
     document.getElementById("provider-only").classList.remove("hidden");
-    document.getElementById("trade").value = currentProfile.trade || "";
+    const tradeSelect = document.getElementById("trade");
+    if (tradeSelect) {
+      tradeSelect.value = (currentProfile.trade || "").toLowerCase();
+    }
     document.getElementById("hourlyRate").value = currentProfile.hourlyRate || "";
   }
 }
@@ -108,7 +111,8 @@ form.addEventListener("submit", async (e) => {
   const name = document.getElementById("name").value.trim();
   const bio = document.getElementById("bio").value.trim();
   const isProvider = currentProfile.role === "provider";
-  const trade = isProvider ? document.getElementById("trade").value.trim() : undefined;
+  const tradeSelect = document.getElementById("trade");
+  const trade = isProvider ? (tradeSelect ? tradeSelect.value.toLowerCase().trim() : "") : undefined;
   const hourlyRate = isProvider ? document.getElementById("hourlyRate").value : undefined;
 
   let valid = true;

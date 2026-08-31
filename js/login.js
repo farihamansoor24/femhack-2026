@@ -1,8 +1,8 @@
 // ===========================================================
-// login.js
+// js/login.js
 // ===========================================================
 
-import { auth,onAuthStateChanged,sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup,serverTimestamp,setDoc,doc,db  } from "./firebase-config.js";
+import { auth, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, serverTimestamp, setDoc, doc, db } from "./firebase-config.js";
 import { signUp, logIn, getUserProfile } from "./auth.js";
 import { fadeIn, shake } from "./anim.js";
 
@@ -121,7 +121,8 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
   const email = document.getElementById("signup-email").value.trim();
   const password = document.getElementById("signup-password").value;
   const role = roleInput.value;
-  const trade = document.getElementById("signup-trade").value.trim();
+  const tradeSelect = document.getElementById("signup-trade");
+  const trade = tradeSelect ? tradeSelect.value.toLowerCase().trim() : "";
   const bio = document.getElementById("signup-bio").value.trim();
   const hourlyRate = document.getElementById("signup-rate").value;
 
@@ -131,7 +132,12 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
   setFieldError("signup-email", !emailOk); if (!emailOk) valid = false;
   const passOk = password.length >= 6;
   setFieldError("signup-password", !passOk); if (!passOk) valid = false;
-  if (role === "provider") { setFieldError("signup-trade", !trade); if (!trade) valid = false; }
+  
+  if (role === "provider") {
+    setFieldError("signup-trade", !trade); 
+    if (!trade) valid = false;
+  }
+  
   if (!valid) { shake(document.getElementById("signup-form")); return; }
 
   const btn = e.target.querySelector("button");
@@ -157,109 +163,95 @@ function friendlyError(err) {
 
 // ------------ Forgot Password Modal ------------
 document.addEventListener('DOMContentLoaded', () => {
-    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
-    const modal = document.getElementById('forgot-password-modal');
-    const closeModalBtn = document.getElementById('close-modal-btn');
-    const resetForm = document.getElementById('forgot-password-form');
-    const resetEmailInput = document.getElementById('reset-email');
-    const statusMsg = document.getElementById('modalStatus');
+  const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+  const modal = document.getElementById('forgot-password-modal');
+  const closeModalBtn = document.getElementById('close-modal-btn');
+  const resetForm = document.getElementById('forgot-password-form');
+  const resetEmailInput = document.getElementById('reset-email');
+  const statusMsg = document.getElementById('modalStatus');
 
-    // Open Modal
-    forgotPasswordLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      modal.classList.remove('hidden');
-    });
+  forgotPasswordLink?.addEventListener('click', (e) => {
+    e.preventDefault();
+    modal.classList.remove('hidden');
+  });
 
-    // Close Modal via button
-    closeModalBtn.addEventListener('click', () => {
+  closeModalBtn?.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
       modal.classList.add('hidden');
-    });
+    }
+  });
 
-    // Close Modal by clicking outside of it
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.add('hidden');
-      }
-    });
- 
-  // 3. Handle Form Submission & Firebase Email Reset
   resetForm?.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Stop form from closing automatically before request finishes
-  
+    e.preventDefault();
     const email = resetEmailInput.value.trim();
-  
-    if (!email && statusMsg)  {
+
+    if (!email && statusMsg) {
       statusMsg.textContent = 'Please enter a valid email address.';
       statusMsg.classList.remove('hidden');
       return;
     }
-  
+
     try { 
-      if(statusMsg){
-      statusMsg.textContent = 'Sending reset email...';
-      statusMsg.classList.remove('hidden');
+      if (statusMsg) {
+        statusMsg.textContent = 'Sending reset email...';
+        statusMsg.classList.remove('hidden');
       }
-      // Firebase Auth Request
       await sendPasswordResetEmail(auth, email);
-   if(statusMsg){
-      statusMsg.textContent = 'Reset link sent! Check your inbox.';
-      statusMsg.classList.remove('hidden');
-   }
-      // Auto-close modal after 2 seconds
+      if (statusMsg) {
+        statusMsg.textContent = 'Reset link sent! Check your inbox.';
+        statusMsg.classList.remove('hidden');
+      }
       setTimeout(() => {
-               modal.classList.add('hidden')
-         }, 2000);
-  
+        modal.classList.add('hidden');
+      }, 2000);
     } catch (error) {
       console.error('Password reset error:', error);
-       if(statusMsg){
-      statusMsg.textContent = error.message || 'Failed to send reset email.';
-       statusMsg.classList.remove('hidden');
-       }
+      if (statusMsg) {
+        statusMsg.textContent = error.message || 'Failed to send reset email.';
+        statusMsg.classList.remove('hidden');
+      }
     }
   });
 });
 
-// -------- Google Authentication-----------------------
-//  For prevent the account selection prompt every time, you can set custom parameters for the GoogleAuthProvider.
-
+// -------- Google Authentication -----------------------
 const googleBtn = document.getElementById('google-auth-btn');
 
 googleBtn?.addEventListener('click', async () => {
   const googleProvider = new GoogleAuthProvider();
   googleProvider.setCustomParameters({
-  prompt: "select_account"
-});
+    prompt: "select_account"
+  });
   try {
-    // alert(roleInput.value)
-    const result = await signInWithPopup(auth, googleProvider);
-    // console.log('Logged in user:', result.user);
+    await signInWithPopup(auth, googleProvider);
     const profile = {
-    uid: auth.currentUser.uid,
-    name: auth.currentUser.displayName,
-    email: auth.currentUser.email,
-    role:roleInput.value,
-  
-    createdAt: serverTimestamp()
-  };
-  if (roleInput.value === "provider") {
-    profile.trade = '';
-    profile.hourlyRate =  0;
-    profile.rating = 0;
-    profile.reviewCount = 0;
-  }
+      uid: auth.currentUser.uid,
+      name: auth.currentUser.displayName,
+      email: auth.currentUser.email,
+      role: roleInput.value,
+      createdAt: serverTimestamp()
+    };
+    if (roleInput.value === "provider") {
+      profile.trade = '';
+      profile.hourlyRate = 0;
+      profile.rating = 0;
+      profile.reviewCount = 0;
+    }
 
-  await setDoc(doc(db, "users", auth.currentUser.uid), profile);
+    await setDoc(doc(db, "users", auth.currentUser.uid), profile);
 
     showSuccess('User has been logged in successfully!.');
-    if(roleInput.value=='customer'){
-     window.location.href = "customer-dashboard.html";
-    }
-    else{
+    if (roleInput.value === 'customer') {
+      window.location.href = "customer-dashboard.html";
+    } else {
       window.location.href = "edit-profile.html";
     }
   } catch (error) {
-     console.error('Google Sign-In Error:', error);
-    showError('Google Sign-In Error:')
+    console.error('Google Sign-In Error:', error);
+    showError('Google Sign-In Error: ' + (error.message || ''));
   }
 });

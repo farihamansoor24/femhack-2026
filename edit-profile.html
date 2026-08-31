@@ -74,7 +74,6 @@
       <div>
         <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="email">Email ID</label>
         <input type="email" id="email" disabled class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
-        <!-- <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="name-error">Email is required.</p> -->
       </div>
       <div>
         <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="bio">Bio</label>
@@ -85,8 +84,15 @@
       <div id="provider-only" class="hidden space-y-5">
         <div>
           <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="trade">Trade / service category</label>
-          <input type="text" id="trade" placeholder="e.g. Plumbing" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
-          <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="trade-error">Trade is required.</p>
+          <select id="trade" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink font-mono focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim cursor-pointer">
+            <option value="" disabled selected>Select category...</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="electrical">Electrical</option>
+            <option value="carpentry">Carpentry</option>
+            <option value="painting">Painting</option>
+            <option value="cleaning">Cleaning</option>
+          </select>
+          <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="trade-error">Please select a category.</p>
         </div>
         <div>
           <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="hourlyRate">Hourly rate ($)</label>

@@ -73,11 +73,9 @@
           <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="login-password-error">Password is required.</p>
         </div>
         <div>
-              <a href="# " class="text-rust block font-mono text-[11px] uppercase tracking-wide mb-1.5" for="signup-bio" id="forgotPasswordLink">Forgot Password</a>
-              
+          <a href="#" class="text-rust block font-mono text-[11px] uppercase tracking-wide mb-1.5" id="forgotPasswordLink">Forgot Password</a>
         </div>
         <button type="submit" class="w-full bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide py-3 rounded-lg transition">Log in</button>
-       
       </form>
     </div>
 
@@ -108,9 +106,16 @@
 
         <div class="hidden space-y-4" id="provider-fields">
           <div>
-            <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="signup-trade">Trade / service category</label>
-            <input type="text" id="signup-trade" placeholder="e.g. Plumbing" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
-            <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="signup-trade-error">Trade is required for providers.</p>
+            <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="signup-trade">Trade / Service Category</label>
+            <select id="signup-trade" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink font-mono focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim cursor-pointer">
+              <option value="" disabled selected>Select category...</option>
+              <option value="plumbing">Plumbing</option>
+              <option value="electrical">Electrical</option>
+              <option value="carpentry">Carpentry</option>
+              <option value="painting">Painting</option>
+              <option value="cleaning">Cleaning</option>
+            </select>
+            <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="signup-trade-error">Please select a category for provider profile.</p>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
@@ -122,7 +127,6 @@
               <input type="text" id="signup-bio" placeholder="11 years experience…" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
             </div>
           </div>
-          
         </div>
 
         <button type="submit" class="w-full bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide py-3 rounded-lg transition">Create account</button>
@@ -131,6 +135,7 @@
 
   </div>
 </div>
+
 <!-- FORGOT PASSWORD MODAL -->
 <div id="forgot-password-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-canvas/80 backdrop-blur-sm px-5">
   <div class="w-full max-w-md bg-paper border border-line rounded-2xl shadow-xl p-8 sm:p-10 relative">
@@ -145,7 +150,7 @@
       <div>
         <label class="block font-mono text-[11px] uppercase tracking-wide text-inksoft mb-1.5" for="reset-email">Email Address</label>
         <input type="email" id="reset-email" placeholder="name@domain.com" class="w-full rounded-lg border border-line px-3.5 py-2.5 text-sm bg-canvas text-ink placeholder:text-inksoft/60 focus:outline-none focus:ring-2 focus:ring-denim focus:border-denim">
-        <p class="hidden field-error mt-1.5 text-xs font-mono text-rust"  id="modalStatus"></p>
+        <p class="hidden field-error mt-1.5 text-xs font-mono text-rust" id="modalStatus"></p>
       </div>
       
       <button type="submit" class="w-full bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide py-3 rounded-lg transition">Send Reset Link</button>
