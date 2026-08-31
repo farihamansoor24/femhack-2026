@@ -13,7 +13,9 @@ import { db,collection, doc, addDoc, updateDoc, getDoc, getDocs, setDoc,
 
 export async function listProviders() {
   const q = query(collection(db, "users"), where("role", "==", "provider"));
+  
   const snap = await getDocs(q);
+  
   return snap.docs.map(d => d.data());
 }
 
