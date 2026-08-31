@@ -3,18 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GUILDWORK</title>
+<title>DISPATCH — Field Services, On Demand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-  tailwind.config = { theme: { extend: { colors: { ink:'#F3F0E8', inksoft:'#9DA6A0', canvas:'#0E1310' },
-    fontFamily: { mono:['"IBM Plex Mono"','ui-monospace','monospace'] } } } }
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        ink:'#F3F0E8', inksoft:'#9DA6A0', canvas:'#0E1310', paper:'#19211D', line:'#2C3833',
+        rust:'#E2703F', rustdark:'#A8451F', denim:'#5B93C0', denimlight:'#84B4D8', ok:'#4FAE86', amber:'#D9A441'
+      },
+      fontFamily: {
+        sans:['Inter','ui-sans-serif','sans-serif'],
+        display:['"Big Shoulders Display"','sans-serif'],
+        mono:['"IBM Plex Mono"','ui-monospace','monospace']
+      }
+    }}
+  }
 </script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
-<body class="bg-canvas min-h-screen flex items-center justify-center [color-scheme:dark]">
-  <div class="font-mono text-sm text-inksoft">Loading GUILDWORK…</div>
-  <script type="module" src="./js/index.js">
-   
-  </script>
+<body class="bg-canvas text-ink font-sans antialiased min-h-screen flex flex-col [color-scheme:dark]">
+
+  <!-- Navigation Bar Container -->
+  <div id="nav-root"></div>
+
+  <!-- Hero Section -->
+  <section class="border-b border-line bg-paper py-20 px-6 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto text-center relative z-10">
+      <span class="font-mono text-xs uppercase tracking-[0.25em] text-rust font-semibold">Reliable On-Demand Services</span>
+      <h1 class="font-display font-black text-5xl sm:text-7xl md:text-8xl tracking-tight text-ink mt-3 uppercase">
+        Field Services,<br><span class="text-rust">Dispatched Fast</span>
+      </h1>
+      <p class="font-sans text-inksoft text-base sm:text-lg max-w-2xl mx-auto mt-6 leading-relaxed">
+        Connect with verified local professionals for plumbing, electrical, repairs, and home maintenance. Fast response, transparent pricing, and quality work.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 mt-8" id="hero-cta-buttons">
+        <a href="browse.html" class="bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide px-8 py-3.5 rounded-xl transition shadow-lg">Browse Services</a>
+        <a href="login.html" class="border border-line hover:border-inksoft bg-canvas text-ink font-mono text-sm uppercase tracking-wide px-8 py-3.5 rounded-xl transition">Sign In / Register</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Trades / Quick Stats -->
+  <section class="border-b border-line py-12 px-6 bg-canvas">
+    <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="p-4 bg-paper border border-line rounded-xl">
+        <div class="font-display font-extrabold text-3xl text-rust">100%</div>
+        <div class="font-mono text-[11px] uppercase text-inksoft mt-1">Verified Pros</div>
+      </div>
+      <div class="p-4 bg-paper border border-line rounded-xl">
+        <div class="font-display font-extrabold text-3xl text-denim">ON DEMAND</div>
+        <div class="font-mono text-[11px] uppercase text-inksoft mt-1">Instant Booking</div>
+      </div>
+      <div class="p-4 bg-paper border border-line rounded-xl">
+        <div class="font-display font-extrabold text-3xl text-ok">TRANSPARENT</div>
+        <div class="font-mono text-[11px] uppercase text-inksoft mt-1">Upfront Hourly Rates</div>
+      </div>
+      <div class="p-4 bg-paper border border-line rounded-xl">
+        <div class="font-display font-extrabold text-3xl text-amber">RATINGS</div>
+        <div class="font-mono text-[11px] uppercase text-inksoft mt-1">Authentic Reviews</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Providers Preview -->
+  <section class="max-w-6xl mx-auto px-6 py-16 w-full flex-grow">
+    <div class="flex justify-between items-end mb-10 flex-wrap gap-4">
+      <div>
+        <span class="font-mono text-xs text-rust uppercase tracking-wide">Top Rated Experts</span>
+        <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-ink uppercase mt-1">Available Professionals</h2>
+      </div>
+      <a href="browse.html" class="text-denim hover:text-denimlight font-mono text-xs uppercase tracking-wide flex items-center gap-1 transition">
+        View All Providers &rarr;
+      </a>
+    </div>
+
+    <!-- Container where JS loads top providers -->
+    <div id="featured-providers-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="col-span-full font-mono text-sm text-inksoft py-12 text-center">Loading featured providers…</div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="border-t border-line bg-paper py-16 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="font-mono text-xs text-rust uppercase tracking-wide">How DISPATCH Works</span>
+        <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-ink uppercase mt-1">Simple 3-Step Process</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-canvas border border-line p-8 rounded-2xl relative">
+          <span class="font-display font-extrabold text-4xl text-rust">01</span>
+          <h3 class="font-bold text-lg text-ink mt-3">Select a Trade</h3>
+          <p class="text-inksoft text-sm mt-2">Browse top-rated local providers filtered by trade, rate, and customer ratings.</p>
+        </div>
+
+        <div class="bg-canvas border border-line p-8 rounded-2xl relative">
+          <span class="font-display font-extrabold text-4xl text-denim">02</span>
+          <h3 class="font-bold text-lg text-ink mt-3">Schedule Booking</h3>
+          <p class="text-inksoft text-sm mt-2">Choose your preferred date, time, and specify your job requirements in seconds.</p>
+        </div>
+
+        <div class="bg-canvas border border-line p-8 rounded-2xl relative">
+          <span class="font-display font-extrabold text-4xl text-ok">03</span>
+          <h3 class="font-bold text-lg text-ink mt-3">Job Completed</h3>
+          <p class="text-inksoft text-sm mt-2">Get service done on-demand, track ticket updates, and leave verified feedback.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-line bg-canvas py-10 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+      <div>
+        <span class="font-display font-extrabold text-2xl text-ink">DISPATCH</span>
+        <p class="font-mono text-[10px] text-inksoft tracking-widest mt-0.5">FIELD SERVICES, ON DEMAND</p>
+      </div>
+      <p class="font-mono text-xs text-inksoft">&copy; 2026 DISPATCH. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/index.js"></script>
 </body>
 </html>
