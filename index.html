@@ -33,20 +33,104 @@
   <div id="nav-root"></div>
 
   <!-- Hero Section -->
-  <section class="border-b border-line bg-paper py-16 sm:py-20 px-6 relative overflow-hidden">
-    <div class="max-w-6xl mx-auto text-center relative z-10 hero-animate">
-      <span class="font-mono text-xs uppercase tracking-[0.25em] text-rust font-semibold">Reliable On-Demand Services</span>
-      <h1 class="font-display font-black text-5xl sm:text-7xl md:text-8xl tracking-tight text-ink mt-3 uppercase">
-        Field Services,<br><span class="text-rust">Dispatched Fast</span>
-      </h1>
-      <p class="font-sans text-inksoft text-base sm:text-lg max-w-2xl mx-auto mt-6 leading-relaxed">
-        Connect with verified local professionals for plumbing, electrical, repairs, and home maintenance. Fast response, transparent pricing, and quality work.
-      </p>
+ <!-- Hero Animated Banner Image Carousel Section -->
+  <section class="border-b border-line bg-canvas relative overflow-hidden">
+    <!-- Carousel Track / Background Slides -->
+    <div id="hero-carousel-container" class="relative min-h-[500px] sm:min-h-[580px] w-full flex items-center justify-center">
 
-      <div class="flex flex-wrap items-center justify-center gap-4 mt-8" id="hero-cta-buttons">
-        <a href="#providers-section" class="bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide px-8 py-3.5 rounded-xl transition shadow-lg">Browse Services</a>
-        <a href="login.html" class="border border-line hover:border-inksoft bg-canvas text-ink font-mono text-sm uppercase tracking-wide px-8 py-3.5 rounded-xl transition">Sign In / Register</a>
+      <!-- Slide 1: General Craftsmen -->
+      <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 pointer-events-none flex items-center justify-center">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 bg-cover bg-center transform scale-105 transition-transform duration-1000" 
+             style="background-image: url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1600&auto=format&fit=crop');">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/80 to-transparent"></div>
+
+        <!-- Text Content Overlay -->
+        <div class="relative z-10 max-w-4xl mx-auto text-center px-6 slide-text">
+          <span class="inline-block font-mono text-xs uppercase tracking-[0.25em] text-rust font-semibold bg-rust/10 border border-rust/30 px-3 py-1 rounded-full mb-4">
+            Verified On-Demand Experts
+          </span>
+          <h1 class="font-display font-black text-4xl sm:text-6xl md:text-7xl tracking-tight text-white uppercase drop-shadow-md">
+            Skilled Craftsmen,<br><span class="text-rust">At Your Service</span>
+          </h1>
+          <p class="font-sans text-inksoft text-sm sm:text-lg max-w-2xl mx-auto mt-4 leading-relaxed">
+            Connect with trusted local specialists for plumbing, electrical, carpentry, and home maintenance. Quality work backed by transparent hourly pricing.
+          </p>
+        </div>
       </div>
+
+      <!-- Slide 2: Plumbing Services -->
+      <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 pointer-events-none flex items-center justify-center">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 bg-cover bg-center transform scale-105 transition-transform duration-1000" 
+             style="background-image: url('https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?q=80&w=1600&auto=format&fit=crop');">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/80 to-transparent"></div>
+
+        <!-- Text Content Overlay -->
+        <div class="relative z-10 max-w-4xl mx-auto text-center px-6 slide-text">
+          <span class="inline-block font-mono text-xs uppercase tracking-[0.25em] text-denimlight font-semibold bg-denim/20 border border-denim/40 px-3 py-1 rounded-full mb-4">
+            Fast Emergency Response
+          </span>
+          <h1 class="font-display font-black text-4xl sm:text-6xl md:text-7xl tracking-tight text-white uppercase drop-shadow-md">
+            Plumbing & Leaks,<br><span class="text-denimlight">Fixed Instantly</span>
+          </h1>
+          <p class="font-sans text-inksoft text-sm sm:text-lg max-w-2xl mx-auto mt-4 leading-relaxed">
+            From emergency pipe bursts to fixture installations, hire master plumbers with verified customer ratings and upfront hourly rates.
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 3: Electrical & Wiring -->
+      <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 pointer-events-none flex items-center justify-center">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 bg-cover bg-center transform scale-105 transition-transform duration-1000" 
+             style="background-image: url('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=1600&auto=format&fit=crop');">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/80 to-transparent"></div>
+
+        <!-- Text Content Overlay -->
+        <div class="relative z-10 max-w-4xl mx-auto text-center px-6 slide-text">
+          <span class="inline-block font-mono text-xs uppercase tracking-[0.25em] text-amber font-semibold bg-amber/10 border border-amber/30 px-3 py-1 rounded-full mb-4">
+            Certified Technicians
+          </span>
+          <h1 class="font-display font-black text-4xl sm:text-6xl md:text-7xl tracking-tight text-white uppercase drop-shadow-md">
+            Electrical & Wiring,<br><span class="text-amber">Handled Safely</span>
+          </h1>
+          <p class="font-sans text-inksoft text-sm sm:text-lg max-w-2xl mx-auto mt-4 leading-relaxed">
+            Certified electricians ready for home rewiring, lighting setups, appliance repairs, and panel upgrades on demand.
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons Floating Above Carousel -->
+      <div class="absolute bottom-16 z-20 flex flex-wrap items-center justify-center gap-4" id="hero-cta-buttons">
+        <a href="#providers-section" class="bg-rustdark hover:bg-rust text-white font-mono text-sm uppercase tracking-wide px-8 py-3.5 rounded-xl transition shadow-xl border border-rust/40">
+          Explore Guild Experts
+        </a>
+        <a href="login.html" class="border border-line hover:border-inksoft bg-canvas/80 backdrop-blur-md text-white font-mono text-sm uppercase tracking-wide px-8 py-3.5 rounded-xl transition">
+          Sign In / Register
+        </a>
+      </div>
+
+      <!-- Carousel Navigation Controls & Dots -->
+      <div class="absolute bottom-5 z-20 flex items-center justify-center gap-6">
+        <button id="prev-slide-btn" class="text-white/70 hover:text-rust font-mono text-xs uppercase tracking-widest transition flex items-center gap-1 bg-paper/60 px-3 py-1 rounded-md border border-line">
+          &larr; Prev
+        </button>
+
+        <div class="flex items-center gap-2" id="carousel-dots">
+          <button class="carousel-dot w-3 h-3 rounded-full bg-rust transition-all" data-index="0"></button>
+          <button class="carousel-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/60 transition-all" data-index="1"></button>
+          <button class="carousel-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/60 transition-all" data-index="2"></button>
+        </div>
+
+        <button id="next-slide-btn" class="text-white/70 hover:text-rust font-mono text-xs uppercase tracking-widest transition flex items-center gap-1 bg-paper/60 px-3 py-1 rounded-md border border-line">
+          Next &rarr;
+        </button>
+      </div>
+
     </div>
   </section>
 

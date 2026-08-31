@@ -1,5 +1,5 @@
 // ===========================================================
-// js/index.js - Guest Home Page Logic with GSAP ScrollTrigger & Hover Effects
+// js/index.js - Guest Home Page Logic with GSAP Carousel & ScrollTrigger
 // ===========================================================
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -7,15 +7,20 @@ import { auth, db, doc, getDoc } from "./firebase-config.js";
 import { listProviders } from "./db.js";
 import { renderNav } from "./nav.js";
 
+// Global Variables for Carousel State
+let currentSlideIndex = 0;
+let isAnimating = false;
+let slideInterval = null;
+let providerDataList = [];
+
 // Register ScrollTrigger plugin if available
 if (window.gsap && window.ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-let providerDataList = [];
-
 document.addEventListener("DOMContentLoaded", async () => {
   renderNav({ profile: null, active: "home" });
+  initBannerCarousel(); // Initializing Carousel
   initAnimations();
 
   onAuthStateChanged(auth, async (user) => {
@@ -47,9 +52,129 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupModalEvents();
 });
 
+// GSAP Banner Image & Text Carousel Logic
+function initBannerCarousel() {
+  const slides = document.querySelectorAll(".carousel-slide");
+  const dots = document.querySelectorAll(".carousel-dot");
+  const prevBtn = document.getElementById("prev-slide-btn");
+  const nextBtn = document.getElementById("next-slide-btn");
+
+  if (!slides.length) return;
+
+  // Show First Slide Initially
+  gsap.set(slides[0], { opacity: 1, pointerEvents: "auto" });
+  const firstText = slides[0].querySelector(".slide-text");
+  if (firstText) gsap.set(firstText, { y: 0, opacity: 1 });
+
+  function goToSlide(nextIndex, direction = 1) {
+    if (isAnimating || nextIndex === currentSlideIndex) return;
+    isAnimating = true;
+
+    const currentSlide = slides[currentSlideIndex];
+    const targetSlide = slides[nextIndex];
+
+    const currentText = currentSlide.querySelector(".slide-text");
+    const targetText = targetSlide.querySelector(".slide-text");
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        isAnimating = false;
+      }
+    });
+
+    if (currentText) {
+      tl.to(currentText, {
+        duration: 0.3,
+        opacity: 0,
+        y: direction * -30,
+        ease: "power2.in"
+      });
+    }
+
+    tl.to(currentSlide, {
+      duration: 0.4,
+      opacity: 0,
+      pointerEvents: "none",
+      ease: "power1.inOut"
+    }, "-=0.2")
+
+    .to(targetSlide, {
+      duration: 0.5,
+      opacity: 1,
+      pointerEvents: "auto",
+      ease: "power1.inOut"
+    }, "-=0.1");
+
+    if (targetText) {
+      tl.fromTo(targetText, 
+        { opacity: 0, y: direction * 30 },
+        { 
+          duration: 0.5, 
+          opacity: 1, 
+          y: 0, 
+          ease: "power2.out"
+        }, 
+        "-=0.3"
+      );
+    }
+
+    dots.forEach((dot, idx) => {
+      if (idx === nextIndex) {
+        dot.classList.remove("bg-white/30");
+        dot.classList.add("bg-rust", "w-6");
+      } else {
+        dot.classList.remove("bg-rust", "w-6");
+        dot.classList.add("bg-white/30");
+      }
+    });
+
+    currentSlideIndex = nextIndex;
+  }
+
+  function startAutoPlay() {
+    stopAutoPlay();
+    slideInterval = setInterval(() => {
+      const nextIndex = (currentSlideIndex + 1) % slides.length;
+      goToSlide(nextIndex, 1);
+    }, 5000);
+  }
+
+  function stopAutoPlay() {
+    if (slideInterval) clearInterval(slideInterval);
+  }
+
+  nextBtn?.addEventListener("click", () => {
+    stopAutoPlay();
+    const nextIndex = (currentSlideIndex + 1) % slides.length;
+    goToSlide(nextIndex, 1);
+    startAutoPlay();
+  });
+
+  prevBtn?.addEventListener("click", () => {
+    stopAutoPlay();
+    const prevIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+    goToSlide(prevIndex, -1);
+    startAutoPlay();
+  });
+
+  dots.forEach((dot) => {
+    dot.addEventListener("click", (e) => {
+      stopAutoPlay();
+      const targetIndex = parseInt(e.target.dataset.index, 10);
+      const direction = targetIndex > currentSlideIndex ? 1 : -1;
+      goToSlide(targetIndex, direction);
+      startAutoPlay();
+    });
+  });
+
+  startAutoPlay();
+}
+
 // GSAP Page Load & Hero Scroll Animations
 function initAnimations() {
-  if (window.gsap) {
+  if (!window.gsap) return;
+
+  if (document.querySelector(".hero-animate")) {
     gsap.from(".hero-animate > *", {
       duration: 0.8,
       y: 30,
@@ -57,24 +182,24 @@ function initAnimations() {
       stagger: 0.15,
       ease: "power2.out"
     });
+  }
 
-    if (window.ScrollTrigger) {
-      gsap.from(".stats-grid > div", {
-        scrollTrigger: {
-          trigger: ".stats-grid",
-          start: "top 85%",
-        },
-        duration: 0.8,
-        y: 30,
-        opacity: 0,
-        stagger: 0.1,
-        ease: "power2.out"
-      });
-    }
+  if (window.ScrollTrigger && document.querySelector(".stats-grid")) {
+    gsap.from(".stats-grid > div", {
+      scrollTrigger: {
+        trigger: ".stats-grid",
+        start: "top 85%",
+      },
+      duration: 0.8,
+      y: 30,
+      opacity: 0,
+      stagger: 0.1,
+      ease: "power2.out"
+    });
   }
 }
 
-// Fetch and Render 6 Providers with GSAP ScrollTrigger & Hover Animations
+// Fetch and Render 6 Providers
 async function loadFeaturedProviders() {
   const grid = document.getElementById("featured-providers-grid");
   if (!grid) return;
@@ -138,7 +263,6 @@ async function loadFeaturedProviders() {
       `;
     }).join("");
 
-    // GSAP ScrollTrigger Animation (Triggers when user scrolls to provider section)
     if (window.gsap && window.ScrollTrigger) {
       gsap.fromTo(".provider-card", 
         { y: 50, opacity: 0 },
@@ -150,7 +274,7 @@ async function loadFeaturedProviders() {
           ease: "power2.out",
           scrollTrigger: {
             trigger: "#featured-providers-grid",
-            start: "top 85%", // Triggers animation when section enters viewport
+            start: "top 85%",
             toggleActions: "play none none none"
           }
         }
@@ -159,9 +283,7 @@ async function loadFeaturedProviders() {
       gsap.to(".provider-card", { opacity: 1, y: 0, stagger: 0.1 });
     }
 
-    // Interactive GSAP Card Hover Animations & Modal Click Listeners
     document.querySelectorAll(".provider-card").forEach(card => {
-      // Hover In: Lift card up, slight scale, border change & button slide
       card.addEventListener("mouseenter", () => {
         gsap.to(card, { 
           y: -8, 
@@ -178,7 +300,6 @@ async function loadFeaturedProviders() {
         }
       });
 
-      // Hover Out: Reset card to initial position
       card.addEventListener("mouseleave", () => {
         gsap.to(card, { 
           y: 0, 
@@ -195,7 +316,6 @@ async function loadFeaturedProviders() {
         }
       });
 
-      // Click event for profile modal
       card.addEventListener("click", () => {
         const id = card.dataset.providerId;
         openProviderProfileModal(id);
@@ -208,7 +328,6 @@ async function loadFeaturedProviders() {
   }
 }
 
-// Open Provider Profile Modal with GSAP Animation
 function openProviderProfileModal(providerId) {
   const provider = providerDataList.find(p => (p.uid || p.id) === providerId);
   if (!provider) return;
@@ -267,7 +386,6 @@ function openProviderProfileModal(providerId) {
   }
 }
 
-// Close Modal Helper
 function setupModalEvents() {
   const modal = document.getElementById("provider-modal");
   const modalContent = document.getElementById("modal-content");
