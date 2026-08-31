@@ -1,11 +1,10 @@
 // ===========================================================
-// js/browse.js - Category Filter & Search Logic
+// js/browse.js - Category Filter, Search Logic & Smooth GSAP Animations
 // ===========================================================
 
 import { requireAuth } from "./auth.js";
 import { listProviders } from "./db.js";
 import { renderNav } from "./nav.js";
-import { fadeIn } from "./anim.js";
 
 let allProviders = [];
 let selectedCategory = "all";
@@ -13,7 +12,16 @@ let searchQuery = "";
 
 requireAuth("customer", async ({ profile }) => {
   renderNav({ profile, active: "browse" });
-  fadeIn("#browse-head");
+
+  // Header Entry Animation
+  if (window.gsap) {
+    gsap.fromTo(
+      "#browse-head",
+      { opacity: 0, y: -20 },
+      { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }
+    );
+  }
+
   await loadProviders();
   setupFilterEvents();
 });
@@ -116,16 +124,17 @@ function renderResults(providers) {
     return;
   }
 
+  // Cards layout with smooth CSS-driven Index-style hover effects
   list.innerHTML = providers.map((p) => {
     const pId = p.uid || p.id;
     const rating = p.rating ? Number(p.rating).toFixed(1) : "0.0";
     
     return `
-      <a href="provider.html?id=${escapeHtml(pId)}" class="pro-card group bg-paper border border-line rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-denim/40 transition flex flex-col gap-4">
+      <a href="provider.html?id=${escapeHtml(pId)}" class="pro-card group bg-paper border border-line hover:border-rust hover:-translate-y-1.5 rounded-2xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 ease-out flex flex-col gap-4">
         <div class="flex items-center gap-3.5">
           ${avatarBlock(p)}
           <div class="min-w-0">
-            <div class="font-semibold text-base truncate">${escapeHtml(p.name || "Anonymous Pro")}</div>
+            <div class="font-semibold text-base truncate text-ink group-hover:text-rust transition-colors">${escapeHtml(p.name || "Anonymous Pro")}</div>
             <div class="font-mono text-[11px] uppercase tracking-wide text-denim mt-0.5">${escapeHtml(p.trade || "General")}</div>
             <div class="font-mono text-xs text-ok mt-1">★ ${rating} (${p.reviewCount || 0})</div>
           </div>
@@ -136,17 +145,32 @@ function renderResults(providers) {
             <span class="font-display font-bold text-xl">$${p.hourlyRate || 0}</span>
             <span class="font-mono text-[10px] text-inksoft ml-1">/ HR</span>
           </div>
-          <span class="text-xs font-mono uppercase tracking-wide text-white bg-neutral-800 group-hover:bg-rust px-3 py-1.5 rounded-lg transition">View</span>
+          <span class="text-xs font-mono uppercase tracking-wide text-white bg-neutral-800 group-hover:bg-rust px-3 py-1.5 rounded-lg transition-colors duration-200">View</span>
         </div>
       </a>
     `;
   }).join("");
 
-  // GSAP clean animation fix to avoid blur/invisible glitches:
+  // Smooth Staggered One-By-One Cards Entry
   if (window.gsap) {
-    gsap.fromTo(".pro-card", 
-      { opacity: 0, y: 15 }, 
-      { opacity: 1, y: 0, duration: 0.35, stagger: 0.05, clearProps: "all" }
+    const cards = document.querySelectorAll(".pro-card");
+
+    gsap.fromTo(
+      cards,
+      {
+        opacity: 0,
+        y: 35,
+        scale: 0.96
+      },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.55,
+        stagger: 0.12, // Distinct delay for clear one-by-one appearance
+        ease: "power2.out",
+        clearProps: "transform,opacity" // Animation ke baad clean transition restore karne ke liye
+      }
     );
   }
 }
