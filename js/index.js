@@ -3,7 +3,7 @@
 // ===========================================================
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { auth, db, doc, getDoc } from "./firebase-config.js";
+import { auth, db, doc, getDoc,collection, query, where, getDocs } from "./firebase-config.js";
 import { listProviders } from "./db.js";
 import { renderNav } from "./nav.js";
 
@@ -328,7 +328,7 @@ async function loadFeaturedProviders() {
   }
 }
 
-function openProviderProfileModal(providerId) {
+async function openProviderProfileModal(providerId) {
   const provider = providerDataList.find(p => (p.uid || p.id) === providerId);
   if (!provider) return;
 
@@ -336,12 +336,14 @@ function openProviderProfileModal(providerId) {
   const modalContent = document.getElementById("modal-content");
   const modalBody = document.getElementById("modal-body");
 
+  // Avatar Formatting
   const avatar = provider.profileImageUrl 
     ? `<img src="${provider.profileImageUrl}" class="w-16 h-16 rounded-full object-cover border-2 border-rust">`
     : `<div class="w-16 h-16 rounded-full bg-denim text-white text-xl font-bold font-display flex items-center justify-center border-2 border-line">
         ${(provider.name || 'P').slice(0, 2).toUpperCase()}
        </div>`;
 
+  // Dynamic Content Loading State
   modalBody.innerHTML = `
     <div class="flex items-center gap-4 mb-5">
       ${avatar}
@@ -362,9 +364,12 @@ function openProviderProfileModal(providerId) {
       </div>
     </div>
 
+    <!-- Reviews Section Container -->
     <div class="mb-6">
-      <h4 class="font-mono text-xs uppercase tracking-wide text-inksoft mb-1">About Provider</h4>
-      <p class="text-ink text-sm leading-relaxed">${escapeHtml(provider.bio || 'No detailed bio provided yet.')}</p>
+      <h4 class="font-mono text-xs uppercase tracking-wide text-rust font-semibold mb-3">Customer Reviews & Feedback</h4>
+      <div id="reviews-container" class="max-h-48 overflow-y-auto pr-1">
+        <p class="text-xs text-inksoft font-mono animate-pulse">Loading reviews...</p>
+      </div>
     </div>
 
     <div class="flex gap-3">
@@ -374,6 +379,7 @@ function openProviderProfileModal(providerId) {
     </div>
   `;
 
+  // Modal Open Animation
   modal.classList.remove("hidden");
   if (window.gsap) {
     gsap.to(modal, { duration: 0.25, opacity: 1, ease: "power2.out" });
@@ -383,6 +389,44 @@ function openProviderProfileModal(providerId) {
     );
   } else {
     modal.classList.remove("opacity-0");
+  }
+
+  // Fetch Reviews from Firestore `reviews` collection where providerId matches
+  try {
+    const reviewsRef = collection(db, "reviews");
+    const q = query(reviewsRef, where("providerId", "==", providerId));
+    const querySnapshot = await getDocs(q);
+
+    const reviewsContainer = document.getElementById("reviews-container");
+
+    if (querySnapshot.empty) {
+      reviewsContainer.innerHTML = `<p class="text-xs text-inksoft italic">Abhi tak is provider ke koi reviews nahi hain.</p>`;
+      return;
+    }
+
+    let reviewsHTML = "";
+    querySnapshot.forEach((docSnap) => {
+      const rev = docSnap.data();
+      const stars = "★".repeat(rev.rating || 5);
+
+      reviewsHTML += `
+        <div class="border-b border-line pb-3 mb-3 last:border-0">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-mono text-xs text-amber font-semibold">${stars} (${rev.rating})</span>
+          </div>
+          <p class="text-xs text-ink leading-relaxed">${escapeHtml(rev.comment || '')}</p>
+        </div>
+      `;
+    });
+
+    reviewsContainer.innerHTML = reviewsHTML;
+
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    const reviewsContainer = document.getElementById("reviews-container");
+    if (reviewsContainer) {
+      reviewsContainer.innerHTML = `<p class="text-xs text-rust">Reviews load karne me masla hua.</p>`;
+    }
   }
 }
 

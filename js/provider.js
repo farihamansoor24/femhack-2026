@@ -2,6 +2,7 @@
 // provider.js
 // ===========================================================
 
+import { db,collection, query, where, getDocs } from "./firebase-config.js";
 import { requireAuth } from "./auth.js";
 import { getProvider, createBooking } from "./db.js";
 import { renderNav } from "./nav.js";
@@ -25,6 +26,7 @@ requireAuth("customer", async ({ user, profile }) => {
   try {
     provider = await getProvider(providerId);
     render();
+    loadProviderReviews(); // Render hone ke baad reviews fetch karenge
   } catch (err) {
     document.getElementById("page-body").innerHTML = `<div class="max-w-6xl mx-auto px-6 py-10 font-mono text-sm text-inksoft">${err.message}</div>`;
   }
@@ -56,11 +58,28 @@ function render() {
     </header>
 
     <div class="max-w-6xl mx-auto px-6 py-10 pb-24 grid lg:grid-cols-[1fr_360px] gap-10 items-start">
-      <div id="about-block">
-        <h3 class="text-lg font-semibold mb-3">About</h3>
-        <p class="text-inksoft text-[15px] max-w-[60ch] leading-relaxed">${escapeHtml(provider.bio || "This provider hasn't added a bio yet.")}</p>
+      
+      <!-- Left Column: About & Reviews -->
+      <div class="space-y-10">
+        <div id="about-block">
+          <h3 class="text-lg font-semibold mb-3">About</h3>
+          <p class="text-inksoft text-[15px] max-w-[60ch] leading-relaxed">${escapeHtml(provider.bio || "This provider hasn't added a bio yet.")}</p>
+        </div>
+
+        <!-- Customer Reviews Section -->
+        <div id="reviews-block" class="pt-6 border-t border-line">
+          <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            Customer Reviews 
+            <span class="font-mono text-xs text-amber font-normal">★ ${(provider.rating || 0).toFixed(1)}</span>
+          </h3>
+          
+          <div id="reviews-list" class="space-y-4">
+            <p class="font-mono text-xs text-inksoft animate-pulse">Loading reviews…</p>
+          </div>
+        </div>
       </div>
 
+      <!-- Right Column: Booking Form -->
       <aside class="bg-paper border border-line rounded-2xl shadow-sm p-6" id="booking-panel">
         <div id="form-error" class="hidden mb-4 rounded-xl border border-rust bg-rust/10 text-rust font-mono text-xs px-4 py-3"></div>
         <div id="form-success" class="hidden mb-4 rounded-xl border border-ok bg-ok/10 text-ok font-mono text-xs px-4 py-3"></div>
@@ -102,8 +121,55 @@ function render() {
 
   fadeIn("#pro-head");
   fadeIn("#about-block", { delay: .1 });
+  fadeIn("#reviews-block", { delay: .12 });
   fadeIn("#booking-panel", { delay: .15, x: 14, y: 0 });
   wireForm();
+}
+
+// Fetch Reviews from Firestore for Provider
+async function loadProviderReviews() {
+  const reviewsContainer = document.getElementById("reviews-list");
+  if (!reviewsContainer) return;
+
+  try {
+    const reviewsRef = collection(db, "reviews");
+    const q = query(reviewsRef, where("providerId", "==", providerId));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      reviewsContainer.innerHTML = `<p class="font-mono text-xs text-inksoft italic">No reviews for this provider yet.</p>`;
+      return;
+    }
+
+    let html = "";
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      const stars = "★".repeat(data.rating || 5);
+      
+      // Date Formatting
+      let formattedDate = "";
+      if (data.createdAt && typeof data.createdAt.toDate === "function") {
+        formattedDate = data.createdAt.toDate().toLocaleDateString(undefined, {
+          year: 'numeric', month: 'short', day: 'numeric'
+        });
+      }
+
+      html += `
+        <div class="bg-paper border border-line rounded-xl p-4 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-mono text-xs text-amber font-semibold">${stars} (${data.rating})</span>
+            ${formattedDate ? `<span class="font-mono text-[10px] text-inksoft">${formattedDate}</span>` : ""}
+          </div>
+          <p class="text-sm text-ink leading-relaxed font-sans">${escapeHtml(data.comment || "")}</p>
+        </div>
+      `;
+    });
+
+    reviewsContainer.innerHTML = html;
+  } catch (err) {
+    console.error("Error loading reviews:", err);
+    reviewsContainer.innerHTML = `<p class="font-mono text-xs text-rust">Failed to load reviews.</p>`;
+  }
 }
 
 function wireForm() {
