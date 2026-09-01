@@ -400,7 +400,7 @@ async function openProviderProfileModal(providerId) {
     const reviewsContainer = document.getElementById("reviews-container");
 
     if (querySnapshot.empty) {
-      reviewsContainer.innerHTML = `<p class="text-xs text-inksoft italic">Abhi tak is provider ke koi reviews nahi hain.</p>`;
+      reviewsContainer.innerHTML = `<p class="text-xs text-inksoft italic">No reviews for this provider yet.</p>`;
       return;
     }
 
@@ -425,7 +425,7 @@ async function openProviderProfileModal(providerId) {
     console.error("Error fetching reviews:", error);
     const reviewsContainer = document.getElementById("reviews-container");
     if (reviewsContainer) {
-      reviewsContainer.innerHTML = `<p class="text-xs text-rust">Reviews load karne me masla hua.</p>`;
+      reviewsContainer.innerHTML = `<p class="text-xs text-rust">Failed to load reviews.</p>`;
     }
   }
 }
